@@ -35,7 +35,7 @@ class Api(val accessToken: String, val appId: String) {
         val category_count = array.length()
         for (i in 0 until category_count) {
             val o = array.get(i) as JSONObject
-            val wm = WallMessage().parse(o)
+            val wm = WallMessage.parse(o)
             wmessages.add(wm)
         }
         return wmessages

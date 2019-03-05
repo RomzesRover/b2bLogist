@@ -6,7 +6,6 @@ import org.json.JSONObject
 
 
 class Attachment {
-    var id: Long = 0//used only for wall post attached to message
     lateinit var type: String //photo,posted_photo,video,audio,link,note,app,poll,doc,geo,message,page,album
     lateinit var photo: Photo //public Photo posted_photo;
     lateinit var video: Video
@@ -24,16 +23,17 @@ class Attachment {
                     continue
                 val attachment = Attachment()
                 attachment.type = att.getString("type")
-                if (attachment.type == "photo" || attachment.type == "posted_photo") {
-                    val x = att.optJSONObject("photo")
-                    if (x != null)
-                        attachment.photo = Photo().parse(x)
-                } else if (attachment.type == "link")
-                    attachment.link = Link().parse(att.getJSONObject("link"))
-                else if (attachment.type == "video")
-                    attachment.video = Video().parseForAttachments(att.getJSONObject("video"))
-                else if (attachment.type == "wall")
-                    attachment.wallMessage = WallMessage().parse(att.getJSONObject("wall"))
+
+                when (attachment.type){
+                    "photo", "posted_photo" ->{
+                        val x = att.optJSONObject("photo")
+                        if (x != null)
+                            attachment.photo = Photo.parse(x)
+                    }
+                    "link" -> attachment.link = Link.parse(att.getJSONObject("link"))
+                    "video" -> attachment.video = Video.parseForAttachments(att.getJSONObject("video"))
+                    "wall" -> attachment.wallMessage = WallMessage.parse(att.getJSONObject("wall"))
+                }
                 attachments_arr.add(attachment)
             }
         }
