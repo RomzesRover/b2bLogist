@@ -10,6 +10,8 @@ import vk.api.utils.Utils
 class Group {
     var gid: Long? = null
     var name: String? = null
+    var status: String? = null
+    var site: String? = null
     var photo: String? = null//50*50
     var is_closed: Boolean? = null
     var is_member: Boolean? = null
@@ -35,6 +37,8 @@ class Group {
             val g = Group()
             g.gid = o.getLong("id")
             g.name = Utils.unescape(o.getString("name"))
+            g.status = Utils.unescape(if (o.has("status")) o.getString("status") else null)
+            g.site = Utils.unescape(if (o.has("site")) o.getString("site") else null)
             g.photo = o.optString("photo_50")
             g.photo_medium = o.optString("photo_100")
             g.photo_big = o.optString("photo_200")
