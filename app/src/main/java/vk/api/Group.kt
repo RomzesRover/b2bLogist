@@ -7,14 +7,12 @@ import vk.api.utils.Utils
 
 
 class Group {
-    var gid: Long = 0
+    var gid: Long? = null
     var name: String? = null
     var photo: String? = null//50*50
     var is_closed: Boolean? = null
     var is_member: Boolean? = null
 
-    //это новые поля, которых у нас пока нет в базе
-    //public String screen_name;
     var photo_medium: String? = null//100*100
     var photo_big: String? = null//200*200
     var description: String? = null
@@ -23,10 +21,10 @@ class Group {
     var can_see_all_posts: Boolean? = null//can_see_all_posts=false означает что стена закрыта
     var is_admin: Boolean? = null
     var admin_level: Int? = null//1-moder, 2-editor, 3-admin
-    lateinit var contacts: ArrayList<Contact>
+    var contacts: ArrayList<Contact>? = null
     var members_count: Int? = null
     var type: Int? = null //0 - group, 1 - page, 2 - event
-    lateinit var links: ArrayList<Link>
+    var links: ArrayList<Link>? = null
 
     companion object {
         @Throws(JSONException::class)
@@ -71,7 +69,7 @@ class Group {
                     val jcontact = jcontacts.get(i) as JSONObject
                     val contact = Contact.parse(jcontact)
                     if (contact != null)
-                        g.contacts.add(contact)
+                        g.contacts!!.add(contact)
                 }
             }
 
@@ -96,7 +94,7 @@ class Group {
                     val jlink = jlinks.get(i) as JSONObject
                     val link = Link.parseFromGroup(jlink)
                     if (link != null)
-                        g.links.add(link)
+                        g.links!!.add(link)
                 }
             }
             return g

@@ -6,33 +6,30 @@ import vk.api.utils.Utils
 
 
 class WallMessage{
-    var from_id: Long = 0
-    var to_id: Long = 0
-    var date: Long = 0
-    var post_type: Int = 0 //where -1 - undefined 0 - post, 1 - copy, 2 - postpone, 3 - suggests
+    var from_id: Long? = null
+    var to_id: Long? = null
+    var date: Long? = null
+    var post_type: Int = -1 //where -1 - undefined 0 - post, 1 - copy, 2 - postpone, 3 - suggests
     var text: String? = null
     var isPinned: Boolean = false
-    var id: Long = 0
-    lateinit var attachments: ArrayList<Attachment>
-    var comment_count: Long = 0
+    var id: Long? = null
+    var attachments: ArrayList<Attachment>? = null
+    var comment_count: Long? = null
     var comment_can_post: Boolean = false
 
     //likes
-    var like_count: Int = 0
+    var like_count: Int? = null
     var user_like: Boolean = false
     var can_like: Boolean = false
     var like_can_publish: Boolean = false
 
     //reposts
-    var reposts_count: Int = 0
+    var reposts_count: Int? = null
     var user_reposted: Boolean = false
 
-    //deprecated fields
-    var copy_owner_id: Long = 0
+    var copy_history: ArrayList<WallMessage>? = null
 
-    lateinit var copy_history: ArrayList<WallMessage>
-
-    var signer_id: Long = 0
+    var signer_id: Long? = null
 
     companion object {
         @Throws(JSONException::class)
@@ -66,13 +63,13 @@ class WallMessage{
                     if (history_item.isNull("id"))
                         continue
 
-                    wm.copy_history.add(parse(history_item))
+                    wm.copy_history!!.add(parse(history_item))
                 }
             }
             val attachments = o.optJSONArray("attachments")
             val geo_json = o.optJSONObject("geo")
             //владельцем опроса является to_id. Даже если добавить опрос в группу от своего имени, то from_id буду я, но опрос всё-равно будет принадлежать группе.
-            wm.attachments = Attachment.parseAttachments(attachments, wm.to_id, wm.copy_owner_id, geo_json)
+            wm.attachments = Attachment.parseAttachments(attachments, wm.to_id!!, geo_json)
             if (o.has("comments")) {
                 val jcomments = o.getJSONObject("comments")
                 wm.comment_count = jcomments.optInt("count").toLong()

@@ -6,16 +6,14 @@ import vk.api.utils.Utils
 
 
 class Video {
-    var vid: Long = 0
-    var owner_id: Long = 0
+    var vid: Long? = null
+    var owner_id: Long? = null
     var title: String? = null
     var description: String? = null
-    var duration: Long = 0
-    var link1: String? = null
+    var duration: Long? = null
     var image: String? = null//130*97
     var image_big: String? = null//320*240
-    //public String photo_640;
-    var date: Long = 0
+    var date: Long? = null
     var player: String? = null
     //files
     var external: String? = null
@@ -25,7 +23,7 @@ class Video {
     var mp4_720: String? = null
     var flv_320: String? = null
     var access_key: String? = null//used when private video attached to message
-    var views: Int = 0
+    var views: Int? = null
 
 
    companion object {

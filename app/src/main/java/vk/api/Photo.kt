@@ -6,8 +6,8 @@ import vk.api.utils.Utils
 
 
 class Photo {
-    var pid: Long = 0
-    var aid: Long = 0
+    var pid: Long? = null
+    var aid: Long? = null
     var owner_id: String? = null
     var src: String? = null//photo_130
     var src_small: String? = null//photo_75
@@ -16,7 +16,7 @@ class Photo {
     var src_xxbig: String? = null//photo_1280
     var src_xxxbig: String? = null//photo_2560
     var phototext: String? = null
-    var created: Long = 0
+    var created: Long? = null
     var like_count: Int? = null
     var user_likes: Boolean? = null
     var comments_count: Int? = null

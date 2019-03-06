@@ -7,14 +7,14 @@ import org.json.JSONObject
 
 class Attachment {
     var type: String? = null //photo,posted_photo,video,audio,link,note,app,poll,doc,geo,message,page,album
-    lateinit var photo: Photo //public Photo posted_photo;
-    lateinit var video: Video
-    lateinit var link: Link
-    lateinit var wallMessage: WallMessage
+    var photo: Photo? = null //public Photo posted_photo;
+    var video: Video? = null
+    var link: Link? = null
+    var wallMessage: WallMessage? = null
 
     companion object {
         @Throws(JSONException::class)
-        fun parseAttachments(attachments: JSONArray?, from_id: Long, copy_owner_id: Long, geo_json: JSONObject?): ArrayList<Attachment> {
+        fun parseAttachments(attachments: JSONArray?, from_id: Long, geo_json: JSONObject?): ArrayList<Attachment> {
             val attachments_arr = ArrayList<Attachment>()
             if (attachments != null) {
                 val size = attachments.length()
