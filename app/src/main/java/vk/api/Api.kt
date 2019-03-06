@@ -8,7 +8,7 @@ import vk.api.utils.Utils
 import java.io.IOException
 
 
-class Api() {
+object Api {
     //http://vk.com/dev/wall.get
     @Throws(IOException::class, JSONException::class)
     fun getWallMessages(owner_id: Long?, count: Int, offset: Int, filter: String): ArrayList<WallMessage> {
