@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val api = Api("476d1af3476d1af3476d1af3c5470402c64476d476d1af31b13955079b57e24d50dcd87", "6887477")
+        val api = Api()
 
         Thread(Runnable {
             var wms = api.getWallMessages(-90405472L, 3, 0, "all")
