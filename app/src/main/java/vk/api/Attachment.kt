@@ -6,7 +6,7 @@ import org.json.JSONObject
 
 
 class Attachment {
-    lateinit var type: String //photo,posted_photo,video,audio,link,note,app,poll,doc,geo,message,page,album
+    var type: String? = null //photo,posted_photo,video,audio,link,note,app,poll,doc,geo,message,page,album
     lateinit var photo: Photo //public Photo posted_photo;
     lateinit var video: Video
     lateinit var link: Link

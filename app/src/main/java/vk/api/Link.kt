@@ -6,10 +6,10 @@ import vk.api.utils.Utils
 
 
 class Link {
-    lateinit var url: String
-    lateinit var title: String
-    lateinit var description: String
-    lateinit var image_src: String
+    var url: String? = null
+    var title: String? = null
+    var description: String? = null
+    var image_src: String? = null
 
     companion object {
         @Throws(NumberFormatException::class, JSONException::class)

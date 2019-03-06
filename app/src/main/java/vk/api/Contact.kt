@@ -7,9 +7,9 @@ import org.json.JSONObject
 
 class Contact {
     var user_id: Long? = null
-    lateinit var desc: String
-    lateinit var email: String
-    lateinit var phone: String
+    var desc: String? = null
+    var email: String? = null
+    var phone: String? = null
 
     companion object {
         @Throws(JSONException::class)

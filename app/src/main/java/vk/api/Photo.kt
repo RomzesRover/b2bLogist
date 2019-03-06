@@ -8,10 +8,10 @@ import vk.api.utils.Utils
 class Photo {
     var pid: Long = 0
     var aid: Long = 0
-    lateinit var owner_id: String
-    lateinit var src: String//photo_130
+    var owner_id: String? = null
+    var src: String? = null//photo_130
     var src_small: String? = null//photo_75
-    lateinit var src_big: String//photo_604
+    var src_big: String? = null//photo_604
     var src_xbig: String? = null//photo_807
     var src_xxbig: String? = null//photo_1280
     var src_xxxbig: String? = null//photo_2560

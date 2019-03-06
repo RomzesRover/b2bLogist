@@ -33,7 +33,7 @@ class Api() {
 
     //http://vk.com/dev/groups.getById
     @Throws(IOException::class, JSONException::class)
-    fun getGroups(uids: Collection<Long>?, domain: String?, fields: String): ArrayList<Group>? {
+    fun getGroups(uids: Collection<Long>?, domain: String?, fields: String?): ArrayList<Group>? {
         if (uids == null && domain == null)
             return null
         if (uids!!.size == 0 && domain == null)
@@ -45,7 +45,7 @@ class Api() {
         else
             str_uids = domain
         params.put("group_ids", str_uids)
-        params.put("fields", fields)
+        params.put("fields", fields ?: "")
         val root = Connectivity.sendRequest(params)
         val array = root.optJSONArray("response")
         return Group.parseGroups(array)

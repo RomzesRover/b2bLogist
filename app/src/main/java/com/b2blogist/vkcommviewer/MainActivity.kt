@@ -18,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
         Thread(Runnable {
             var wms = api.getWallMessages(-90405472L, 3, 0, "all")
+            var group = api.getGroups(arrayListOf(90405472L), null, null)!![0]
+
+            Log.v("HERE", group.name)
 
             for (one in wms) {
                 Log.v("HERE", one.text)

@@ -6,16 +6,19 @@ import java.io.InputStreamReader
 import java.io.StringWriter
 
 object Utils {
-    fun unescape(text: String): String {
-        return text
-            .replace("&amp;", "&")
-            .replace("&quot;", "\"")
-            .replace("<br>", "\n")
-            .replace("&gt;", ">")
-            .replace("&lt;", "<")
-            .replace("<br/>", "\n")
-            .replace("&ndash;", "-")
-            .trim { it <= ' ' }
+    fun unescape(text: String?): String? {
+        return when (text){
+            null -> null
+            else -> text
+                .replace("&amp;", "&")
+                .replace("&quot;", "\"")
+                .replace("<br>", "\n")
+                .replace("&gt;", ">")
+                .replace("&lt;", "<")
+                .replace("<br/>", "\n")
+                .replace("&ndash;", "-")
+                .trim { it <= ' ' }
+        }
     }
 
 

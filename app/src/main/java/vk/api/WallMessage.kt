@@ -10,7 +10,7 @@ class WallMessage{
     var to_id: Long = 0
     var date: Long = 0
     var post_type: Int = 0 //where -1 - undefined 0 - post, 1 - copy, 2 - postpone, 3 - suggests
-    lateinit var text: String
+    var text: String? = null
     var isPinned: Boolean = false
     var id: Long = 0
     lateinit var attachments: ArrayList<Attachment>

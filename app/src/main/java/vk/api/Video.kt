@@ -8,23 +8,23 @@ import vk.api.utils.Utils
 class Video {
     var vid: Long = 0
     var owner_id: Long = 0
-    lateinit var title: String
-    lateinit var description: String
+    var title: String? = null
+    var description: String? = null
     var duration: Long = 0
     var link1: String? = null
-    lateinit var image: String//130*97
-    lateinit var image_big: String//320*240
+    var image: String? = null//130*97
+    var image_big: String? = null//320*240
     //public String photo_640;
     var date: Long = 0
-    lateinit var player: String
+    var player: String? = null
     //files
-    lateinit var external: String
-    lateinit var mp4_240: String
-    lateinit var mp4_360: String
-    lateinit var mp4_480: String
-    lateinit var mp4_720: String
-    lateinit var flv_320: String
-    lateinit var access_key: String//used when private video attached to message
+    var external: String? = null
+    var mp4_240: String? = null
+    var mp4_360: String? = null
+    var mp4_480: String? = null
+    var mp4_720: String? = null
+    var flv_320: String? = null
+    var access_key: String? = null//used when private video attached to message
     var views: Int = 0
 
 

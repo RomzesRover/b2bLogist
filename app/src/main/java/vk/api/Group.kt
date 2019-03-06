@@ -8,17 +8,17 @@ import vk.api.utils.Utils
 
 class Group {
     var gid: Long = 0
-    lateinit var name: String
-    lateinit var photo: String//50*50
+    var name: String? = null
+    var photo: String? = null//50*50
     var is_closed: Boolean? = null
     var is_member: Boolean? = null
 
     //это новые поля, которых у нас пока нет в базе
     //public String screen_name;
-    lateinit var photo_medium: String//100*100
-    lateinit var photo_big: String//200*200
-    lateinit var description: String
-    lateinit var wiki_page: String
+    var photo_medium: String? = null//100*100
+    var photo_big: String? = null//200*200
+    var description: String? = null
+    var wiki_page: String? = null
     var fixed_post: Long? = null
     var can_see_all_posts: Boolean? = null//can_see_all_posts=false означает что стена закрыта
     var is_admin: Boolean? = null
