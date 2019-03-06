@@ -3,6 +3,7 @@ package vk.api
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import vk.api.utils.Cover
 import vk.api.utils.Utils
 
 
@@ -25,6 +26,8 @@ class Group {
     var members_count: Int? = null
     var type: Int? = null //0 - group, 1 - page, 2 - event
     var links: ArrayList<Link>? = null
+    var cover_Enabled = 0 //0 - disabled, 1 - enabled
+    var covers: ArrayList<Cover>? = null
 
     companion object {
         @Throws(JSONException::class)
@@ -70,6 +73,23 @@ class Group {
                     val contact = Contact.parse(jcontact)
                     if (contact != null)
                         g.contacts!!.add(contact)
+                }
+            }
+
+            var jcover = o.optJSONObject("cover")
+            if (jcover != null){
+                g.cover_Enabled = jcover.getInt("enabled")
+                if (g.cover_Enabled == 1){
+                    val jcovers = jcover.optJSONArray("images")
+                    if (jcovers != null) {
+                        g.covers = ArrayList<Cover>()
+                        for (i in 0 until jcovers.length()) {
+                            val jcover = jcovers.get(i) as JSONObject
+                            val cover = Cover.parse(jcover)
+                            if (cover != null)
+                                g.covers!!.add(cover)
+                        }
+                    }
                 }
             }
 

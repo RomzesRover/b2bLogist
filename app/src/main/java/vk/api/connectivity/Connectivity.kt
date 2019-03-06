@@ -14,7 +14,7 @@ import java.util.zip.GZIPInputStream
 
 object Connectivity {
     private val BASE_URL = "https://api.vk.com/method/"
-    private val API_VERSION = "5.5"
+    private val API_VERSION = "5.92"
     private val TAG = "VKAPI"
     private var enable_compression = true
     private val accessToken = "476d1af3476d1af3476d1af3c5470402c64476d476d1af31b13955079b57e24d50dcd87"

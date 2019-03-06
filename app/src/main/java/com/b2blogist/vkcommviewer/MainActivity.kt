@@ -14,9 +14,11 @@ class MainActivity : AppCompatActivity() {
 
         Thread(Runnable {
             var wms = Api.getWallMessages(-90405472L, 3, 0, "all")
-            var group = Api.getGroups(arrayListOf(90405472L), null, null)!![0]
+            var group = Api.getGroups(arrayListOf(90405472L), null, "cover")!![0]
 
-            Log.v("HERE", group.name)
+            Log.v("Name", group.name)
+
+            Log.v("CoverImgSrc", group.covers?.get(4)?.src ?: "no image")
 
             for (one in wms) {
                 Log.v("HERE", one.text)
