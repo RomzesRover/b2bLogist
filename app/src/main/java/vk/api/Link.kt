@@ -21,5 +21,15 @@ class Link {
             link.image_src = o.optString("image_src")
             return link
         }
+
+        @Throws(NumberFormatException::class, JSONException::class)
+        fun parseFromGroup(o: JSONObject): Link {
+            val link = Link()
+            link.url = o.optString("url")
+            link.title = Utils.unescape(o.optString("name"))
+            link.description = Utils.unescape(o.optString("desc"))
+            link.image_src = o.optString("photo_100")
+            return link
+        }
     }
 }

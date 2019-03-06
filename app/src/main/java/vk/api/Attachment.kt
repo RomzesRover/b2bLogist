@@ -20,7 +20,7 @@ class Attachment {
                 val size = attachments.length()
                 for (j in 0 until size) {
                     val att = attachments.get(j)
-                    if (att is JSONObject == false)
+                    if (!(att is JSONObject))
                         continue
                     val attachment = Attachment()
                     attachment.type = att.getString("type")

@@ -41,6 +41,26 @@ class Api(val accessToken: String, val appId: String) {
         return wmessages
     }
 
+    //http://vk.com/dev/groups.getById
+    @Throws(IOException::class, JSONException::class)
+    fun getGroups(uids: Collection<Long>?, domain: String?, fields: String): ArrayList<Group>? {
+        if (uids == null && domain == null)
+            return null
+        if (uids!!.size == 0 && domain == null)
+            return null
+        val params = Params("groups.getById")
+        val str_uids: String?
+        if (uids != null && uids.size > 0)
+            str_uids = Utils.arrayToString(uids)
+        else
+            str_uids = domain
+        params.put("group_ids", str_uids)
+        params.put("fields", fields)
+        val root = sendRequest(params)
+        val array = root.optJSONArray("response")
+        return Group.parseGroups(array)
+    }
+
     @Throws(IOException::class, JSONException::class)
     private fun sendRequest(params: Params): JSONObject {
         return sendRequest(params, false)

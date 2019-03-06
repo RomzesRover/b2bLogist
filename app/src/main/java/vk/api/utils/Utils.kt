@@ -18,6 +18,19 @@ object Utils {
             .trim { it <= ' ' }
     }
 
+
+    fun <T> arrayToString(items: Collection<T>?): String? {
+        if (items == null)
+            return null
+        var str_cids = ""
+        for (item in items) {
+            if (str_cids.isNotEmpty())
+                str_cids += ','.toString()
+            str_cids += item
+        }
+        return str_cids
+    }
+
     @Throws(IOException::class)
     fun convertStreamToString(`is`: InputStream): String {
         val r = InputStreamReader(`is`)
