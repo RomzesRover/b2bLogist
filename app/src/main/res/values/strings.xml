@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">b2bLogist</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
 </resources>
