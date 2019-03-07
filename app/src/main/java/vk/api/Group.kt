@@ -3,7 +3,6 @@ package vk.api
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import vk.api.utils.Cover
 import vk.api.utils.Utils
 
 

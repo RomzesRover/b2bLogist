@@ -1,4 +1,4 @@
-package vk.api.utils
+package vk.api
 
 import org.json.JSONException
 import org.json.JSONObject
@@ -10,7 +10,7 @@ class Cover {
 
     companion object {
         @Throws(NumberFormatException::class, JSONException::class)
-        fun parse(o: JSONObject): Cover{
+        fun parse(o: JSONObject): Cover {
             val c = Cover()
             c.src = o.getString("url")
             c.width = o.getInt("width")
