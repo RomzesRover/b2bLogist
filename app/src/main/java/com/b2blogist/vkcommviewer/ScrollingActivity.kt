@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_scrolling.*
 import kotlinx.android.synthetic.main.content_scrolling.*
 import vk.api.Api
 import vk.api.Group
+import vk.api.WallMessage
 
 
 class ScrollingActivity : AppCompatActivity() {
@@ -28,26 +29,6 @@ class ScrollingActivity : AppCompatActivity() {
             updateOperation()
         }
 
-        //init recycle view
-        viewAdapter = GroupPageAdapter(this, Group(), ArrayList(), quantityOfWallPostToEachLoad)
-        viewManager = LinearLayoutManager(this)
-        recycler_view.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
-        //set on load more listener (load and apply new posts)
-        viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener{
-            override fun onLoadMore() {
-                Thread(Runnable {
-                    var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
-                    runOnUiThread {
-                        viewAdapter.addWallMessages(wms)
-                    }
-                }).start()
-            }
-        })
-
         //start update on activity open
         swiperefresh.isRefreshing = true
         updateOperation()
@@ -58,7 +39,7 @@ class ScrollingActivity : AppCompatActivity() {
         //get group
         var group = Api.getGroups(arrayListOf(90405472L), null, "cover,contacts,status,members_count,description,site")!![0]
         //get wall messages
-        var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, 0, "all")
+        var wallMessages = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, 0, "all")
 
         runOnUiThread {
             //set group name as title
@@ -72,10 +53,41 @@ class ScrollingActivity : AppCompatActivity() {
                 }
             })
             //update adapter for recycler view
-            viewAdapter.setNewGroupInfo(group)
-            viewAdapter.setNewWallMessages(wms)
+            initRecycleView(group, wallMessages)
             //stop refresh animation
             swiperefresh.isRefreshing = false
         }
     }).start()
+
+    private fun initRecycleView(group: Group, wallMessages: ArrayList<WallMessage>){
+        if (::viewAdapter.isInitialized){
+            viewAdapter.setNewGroupInfo(group)
+            viewAdapter.setNewWallMessages(wallMessages)
+        } else {
+            //init recycle view
+            viewAdapter = GroupPageAdapter(this, group, wallMessages, quantityOfWallPostToEachLoad)
+            viewManager = LinearLayoutManager(this)
+            recycler_view.apply {
+                setHasFixedSize(true)
+                layoutManager = viewManager
+                adapter = viewAdapter
+            }
+            //set on load more listener (load and apply new posts)
+            viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {
+                override fun onLoadMore() {
+                    Thread(Runnable {
+                        var wms = Api.getWallMessages(
+                            -90405472L,
+                            quantityOfWallPostToEachLoad,
+                            viewAdapter.itemCount - 1,
+                            "all"
+                        )
+                        runOnUiThread {
+                            viewAdapter.addWallMessages(wms)
+                        }
+                    }).start()
+                }
+            })
+        }
+    }
 }
