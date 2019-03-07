@@ -19,8 +19,8 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
     private var lastVisibleItem: Int? = null
     private var totalItemCount: Int? = null
     private var onLoadMoreListener: OnLoadMoreListener? = null
-    var isLoading: Boolean = false
-    var isEndOfListReached: Boolean = false
+    var isLoading: Boolean = true
+    var isEndOfListReached: Boolean = true
 
     fun setOnLoadMoreListener(recyclerView: RecyclerView, mOnLoadMoreListener: OnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener
@@ -28,13 +28,13 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                totalItemCount = linearLayoutManager.itemCount
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                if (!isLoading && totalItemCount!! <= lastVisibleItem!! + visibleThreshold) {
-                    if (onLoadMoreListener != null) {
-                        onLoadMoreListener!!.onLoadMore()
+                if (!isEndOfListReached) {
+                    totalItemCount = linearLayoutManager.itemCount
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                    if (!isLoading && totalItemCount!! <= lastVisibleItem!! + visibleThreshold) {
+                        onLoadMoreListener?.onLoadMore()
+                        isLoading = true
                     }
-                    isLoading = true
                 }
             }
         })

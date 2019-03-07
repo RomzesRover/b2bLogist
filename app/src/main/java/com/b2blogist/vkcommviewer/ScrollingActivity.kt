@@ -16,6 +16,8 @@ import vk.api.Group
 
 
 class ScrollingActivity : AppCompatActivity() {
+    private lateinit var viewAdapter: GroupPageAdapter
+    private lateinit var viewManager: RecyclerView.LayoutManager
     private val quantityOfWallPostToEachLoad = 15
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,11 +29,27 @@ class ScrollingActivity : AppCompatActivity() {
         }
 
         //init recycle view
+        viewAdapter = GroupPageAdapter(this, Group(), ArrayList())
+        viewManager = LinearLayoutManager(this)
         recycler_view.apply {
             setHasFixedSize(true)
-            adapter = GroupPageAdapter(applicationContext, Group(), ArrayList())
-            layoutManager = LinearLayoutManager(applicationContext)
+            layoutManager = viewManager
+            adapter = viewAdapter
         }
+        //set on load more listener (load and apply new posts)
+        viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener{
+            override fun onLoadMore() {
+                if (!viewAdapter.isEndOfListReached)
+                    Thread(Runnable {
+                        var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
+                        runOnUiThread {
+                            viewAdapter.addWallMessages(wms)
+                            viewAdapter.isLoading = false
+                            viewAdapter.isEndOfListReached = wms.size < quantityOfWallPostToEachLoad
+                        }
+                    }).start()
+            }
+        })
 
         //start update on activity open
         swiperefresh.isRefreshing = true
@@ -57,22 +75,10 @@ class ScrollingActivity : AppCompatActivity() {
                 }
             })
             //update adapter for recycler view
-            (recycler_view.adapter as GroupPageAdapter).setNewGroupInfo(group)
-            (recycler_view.adapter as GroupPageAdapter).setNewWallMessages(wms)
-            //set on load more listener (load and apply new posts)
-            (recycler_view.adapter as GroupPageAdapter).setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener{
-                override fun onLoadMore() {
-                    if (!(recycler_view.adapter as GroupPageAdapter).isEndOfListReached)
-                        Thread(Runnable {
-                            var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, (recycler_view.adapter as GroupPageAdapter).itemCount - 1, "all")
-                            runOnUiThread {
-                                (recycler_view.adapter as GroupPageAdapter).addWallMessages(wms)
-                                (recycler_view.adapter as GroupPageAdapter).isLoading = false
-                                (recycler_view.adapter as GroupPageAdapter).isEndOfListReached = wms.size < quantityOfWallPostToEachLoad
-                            }
-                        }).start()
-                }
-            })
+            viewAdapter.setNewGroupInfo(group)
+            viewAdapter.setNewWallMessages(wms)
+            viewAdapter.isLoading = false
+            viewAdapter.isEndOfListReached = wms.size < quantityOfWallPostToEachLoad
             //stop refresh animation
             swiperefresh.isRefreshing = false
         }
