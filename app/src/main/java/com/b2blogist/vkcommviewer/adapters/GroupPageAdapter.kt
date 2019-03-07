@@ -11,15 +11,42 @@ import kotlinx.android.synthetic.main.group_page_header.view.*
 import kotlinx.android.synthetic.main.group_page_row.view.*
 import vk.api.Group
 import vk.api.WallMessage
+import android.support.v7.widget.LinearLayoutManager
 
-
-
-
-class GroupPageAdapter(private val context: Context,private var group: Group, private val wallMessages: ArrayList<WallMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
+    private val visibleThreshold = 5
+    private var lastVisibleItem: Int? = null
+    private var totalItemCount: Int? = null
+    private var onLoadMoreListener: OnLoadMoreListener? = null
+    var isLoading: Boolean = false
+    var isEndOfListReached: Boolean = false
+
+    fun setOnLoadMoreListener(recyclerView: RecyclerView, mOnLoadMoreListener: OnLoadMoreListener) {
+        this.onLoadMoreListener = mOnLoadMoreListener
+        val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                totalItemCount = linearLayoutManager.itemCount
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                if (!isLoading && totalItemCount!! <= lastVisibleItem!! + visibleThreshold) {
+                    if (onLoadMoreListener != null) {
+                        onLoadMoreListener!!.onLoadMore()
+                    }
+                    isLoading = true
+                }
+            }
+        })
+    }
 
     fun addWallMessages(wallMessages: ArrayList<WallMessage>){
         this.wallMessages.addAll(wallMessages)
+        notifyDataSetChanged()
+    }
+
+    fun setNewWallMessages(wallMessages: ArrayList<WallMessage>){
+        this.wallMessages = wallMessages
         notifyDataSetChanged()
     }
 
@@ -84,5 +111,9 @@ class GroupPageAdapter(private val context: Context,private var group: Group, pr
             view.tvAnimalName.text = wallMessage.text
 
         }
+    }
+
+    interface OnLoadMoreListener{
+        fun onLoadMore()
     }
 }
