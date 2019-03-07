@@ -13,14 +13,14 @@ import vk.api.Group
 import vk.api.WallMessage
 import android.support.v7.widget.LinearLayoutManager
 
-class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>, private val quantityOfWallPostToEachLoad: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
     private val visibleThreshold = 5
     private var lastVisibleItem: Int? = null
     private var totalItemCount: Int? = null
     private var onLoadMoreListener: OnLoadMoreListener? = null
-    var isLoading: Boolean = true
-    var isEndOfListReached: Boolean = true
+    private var isLoading: Boolean = true
+    private var isEndOfListReached: Boolean = true
 
     fun setOnLoadMoreListener(recyclerView: RecyclerView, mOnLoadMoreListener: OnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener
@@ -43,11 +43,15 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
     fun addWallMessages(wallMessages: ArrayList<WallMessage>){
         this.wallMessages.addAll(wallMessages)
         notifyDataSetChanged()
+        isLoading = false
+        isEndOfListReached = wallMessages.size < quantityOfWallPostToEachLoad
     }
 
     fun setNewWallMessages(wallMessages: ArrayList<WallMessage>){
         this.wallMessages = wallMessages
         notifyDataSetChanged()
+        isLoading = false
+        isEndOfListReached = wallMessages.size < quantityOfWallPostToEachLoad
     }
 
     fun setNewGroupInfo(group: Group){

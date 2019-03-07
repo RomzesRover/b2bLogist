@@ -29,7 +29,7 @@ class ScrollingActivity : AppCompatActivity() {
         }
 
         //init recycle view
-        viewAdapter = GroupPageAdapter(this, Group(), ArrayList())
+        viewAdapter = GroupPageAdapter(this, Group(), ArrayList(), quantityOfWallPostToEachLoad)
         viewManager = LinearLayoutManager(this)
         recycler_view.apply {
             setHasFixedSize(true)
@@ -39,15 +39,12 @@ class ScrollingActivity : AppCompatActivity() {
         //set on load more listener (load and apply new posts)
         viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener{
             override fun onLoadMore() {
-                if (!viewAdapter.isEndOfListReached)
-                    Thread(Runnable {
-                        var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
-                        runOnUiThread {
-                            viewAdapter.addWallMessages(wms)
-                            viewAdapter.isLoading = false
-                            viewAdapter.isEndOfListReached = wms.size < quantityOfWallPostToEachLoad
-                        }
-                    }).start()
+                Thread(Runnable {
+                    var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
+                    runOnUiThread {
+                        viewAdapter.addWallMessages(wms)
+                    }
+                }).start()
             }
         })
 
@@ -77,8 +74,6 @@ class ScrollingActivity : AppCompatActivity() {
             //update adapter for recycler view
             viewAdapter.setNewGroupInfo(group)
             viewAdapter.setNewWallMessages(wms)
-            viewAdapter.isLoading = false
-            viewAdapter.isEndOfListReached = wms.size < quantityOfWallPostToEachLoad
             //stop refresh animation
             swiperefresh.isRefreshing = false
         }
