@@ -1,18 +1,27 @@
 package com.b2blogist.vkcommviewer.adapters
 
 import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
+import android.text.util.Linkify
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.b2blogist.vkcommviewer.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_header.view.*
 import kotlinx.android.synthetic.main.group_page_row.view.*
 import vk.api.Group
 import vk.api.WallMessage
-import android.support.v7.widget.LinearLayoutManager
-import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>, private val quantityOfWallPostToEachLoad: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
@@ -77,7 +86,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             holder.bindHeader(group)
         } else {
             if (holder is WallMessageHolder) {
-                holder.bindWallMessage(wallMessages[position-1])
+                holder.bindWallMessage(group, wallMessages[position-1])
             }
         }
     }
@@ -99,11 +108,10 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
 
         fun bindHeader(group: Group){
             this.group = group
+
             view.group_name.text = group.name ?: "No group name"
             view.group_status.text = group.status ?: "No group status"
-            view.group_avatar.post {
-                Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).resize(view.group_avatar.width, view.group_avatar.height).centerCrop().into(view.group_avatar)
-            }
+            Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_avatar)
             view.group_description.text = group.description ?: "No group desc"
             view.group_web_address.text = group.site ?: "No group site"
             view.group_location_address.text = (group.city_name ?: "No city").plus( ", ").plus(group.addresses?.get(0)?.address ?: "No group address")
@@ -113,6 +121,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
 
     class WallMessageHolder(private val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener{
         private var wallMessage: WallMessage? = null
+        private var group: Group? = null
 
         init {
             view.setOnClickListener(this)
@@ -122,10 +131,39 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             Log.d("RecyclerView", "CLICK!")
         }
 
-        fun bindWallMessage(wallMessage: WallMessage){
+        fun bindWallMessage(group: Group, wallMessage: WallMessage){
+            this.group = group
             this.wallMessage = wallMessage
-            view.tvAnimalName.text = wallMessage.text
 
+            Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_avatar_list)
+            view.group_name_list.text = group.name ?: "No group name"
+            view.post_date.text = convertLongToTime(wallMessage.date)
+            view.post_text.movementMethod = LinkMovementMethod.getInstance()
+            view.post_text.text = linkifyHtml(wallMessage.text ?: "No post text", Linkify.ALL)
+        }
+
+        private fun convertLongToTime(time: Long?): String {
+            time?.let {
+                val date = Date(it * 1000L)
+                val format = SimpleDateFormat("dd MMM yyyy 'at' HH:mm")
+                return format.format(date)
+            }
+            return "No post date"
+        }
+
+        private fun linkifyHtml(html: String, linkifyMask: Int): Spannable {
+            val text = Html.fromHtml(html)
+            val currentSpans = text.getSpans(0, text.length, URLSpan::class.java)
+
+            val buffer = SpannableString(text)
+            Linkify.addLinks(buffer, linkifyMask)
+
+            for (span in currentSpans) {
+                val end = text.getSpanEnd(span)
+                val start = text.getSpanStart(span)
+                buffer.setSpan(span, start, end, 0)
+            }
+            return buffer
         }
     }
 
