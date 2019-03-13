@@ -48,6 +48,23 @@ object Api {
         params.put("fields", fields ?: "")
         val root = Connectivity.sendRequest(params)
         val array = root.optJSONArray("response")
-        return Group.parseGroups(array)
+        //determine addresses
+        val groupListToReturn = Group.parseGroups(array)
+        groupListToReturn.forEach {
+            it.addresses = getGroupAdressesById(it.gid)
+        }
+        return groupListToReturn
+    }
+
+    //http://vk.com/dev/groups.getById
+    @Throws(IOException::class, JSONException::class)
+    fun getGroupAdressesById(uid: Long?): ArrayList<GroupAddress>? {
+        if (uid == null)
+            return null
+        val params = Params("groups.getAddresses")
+        params.put("group_id", uid)
+        val root = Connectivity.sendRequest(params)
+        val array = root.optJSONObject("response").optJSONArray("items")
+        return GroupAddress.parseGroupAddresses(array)
     }
 }

@@ -29,6 +29,7 @@ class Group {
     var links: ArrayList<Link>? = null
     var cover_Enabled = 0 //0 - disabled, 1 - enabled
     var covers: ArrayList<Cover>? = null
+    var addresses: ArrayList<GroupAddress>? = null //you must to determine addresses by additional call web api
 
     companion object {
         @Throws(JSONException::class)
