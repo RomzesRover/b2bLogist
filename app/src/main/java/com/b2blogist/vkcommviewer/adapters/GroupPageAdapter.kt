@@ -20,8 +20,8 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
     private var lastVisibleItem: Int? = null
     private var totalItemCount: Int? = null
     private var onLoadMoreListener: OnLoadMoreListener? = null
-    private var isLoading: Boolean = true
-    private var isEndOfListReached: Boolean = true
+    private var isLoading: Boolean = false
+    private var isEndOfListReached: Boolean = false
 
     fun setOnLoadMoreListener(recyclerView: RecyclerView, mOnLoadMoreListener: OnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener

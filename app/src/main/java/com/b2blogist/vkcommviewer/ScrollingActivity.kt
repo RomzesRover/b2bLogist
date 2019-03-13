@@ -76,12 +76,7 @@ class ScrollingActivity : AppCompatActivity() {
             viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {
                 override fun onLoadMore() {
                     Thread(Runnable {
-                        var wms = Api.getWallMessages(
-                            -90405472L,
-                            quantityOfWallPostToEachLoad,
-                            viewAdapter.itemCount - 1,
-                            "all"
-                        )
+                        var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
                         runOnUiThread {
                             viewAdapter.addWallMessages(wms)
                         }
