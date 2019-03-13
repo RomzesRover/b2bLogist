@@ -30,6 +30,8 @@ class Group {
     var cover_Enabled = 0 //0 - disabled, 1 - enabled
     var covers: ArrayList<Cover>? = null
     var addresses: ArrayList<GroupAddress>? = null //you must to determine addresses by additional call web api
+    var city_name: String? = null//100*100
+    var city_id: Int? = null//200*200
 
     companion object {
         @Throws(JSONException::class)
@@ -95,6 +97,12 @@ class Group {
                         }
                     }
                 }
+            }
+
+            var jcity = o.optJSONObject("city")
+            if (jcity != null){
+                g.city_id = jcity.optInt("id", 0)
+                g.city_name = jcity.optString("title")
             }
 
             //if doesn't exist it means value is unknown
