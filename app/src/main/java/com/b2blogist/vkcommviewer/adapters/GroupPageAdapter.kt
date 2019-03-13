@@ -33,12 +33,16 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     totalItemCount = linearLayoutManager.itemCount
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
                     if (!isLoading && totalItemCount!! <= lastVisibleItem!! + visibleThreshold) {
-                        onLoadMoreListener?.onLoadMore()
                         isLoading = true
+                        onLoadMoreListener?.onLoadMore()
                     }
                 }
             }
         })
+    }
+
+    fun loadInProgress(){
+        isLoading = true
     }
 
     fun addWallMessages(wallMessages: ArrayList<WallMessage>){
