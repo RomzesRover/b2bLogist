@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.group_page_row.view.*
 import vk.api.Group
 import vk.api.WallMessage
 import android.support.v7.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 
 class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>, private val quantityOfWallPostToEachLoad: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
@@ -94,8 +95,15 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
 
         fun bindHeader(group: Group){
             this.group = group
-            view.group_name.text = group.name
-
+            view.group_name.text = group.name ?: "No group name"
+            view.group_status.text = group.status ?: "No group status"
+            view.group_avatar.post {
+                Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).resize(view.group_avatar.width, view.group_avatar.height).centerCrop().into(view.group_avatar)
+            }
+            view.group_description.text = group.description ?: "No group desc"
+            view.group_web_address.text = group.site ?: "No group site"
+            view.group_location_address.text = (group.city_name ?: "No city").plus( ", ").plus(group.addresses?.get(0)?.address ?: "No group address")
+            view.group_telephone.text = group.contacts?.first()?.phone ?: "No phone"
         }
     }
 

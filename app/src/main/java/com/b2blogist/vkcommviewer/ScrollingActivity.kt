@@ -37,7 +37,7 @@ class ScrollingActivity : AppCompatActivity() {
     private fun updateOperation() = Thread(Runnable {
         //initial load of page
         //get group
-        var group = Api.getGroups(arrayListOf(90405472L), null, "cover,contacts,status,members_count,description,site")!![0]
+        var group = Api.getGroups(arrayListOf(90405472L), null, "cover,contacts,status,members_count,description,site,city")!![0]
         //get wall messages
         var wallMessages = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, 0, "all")
 
