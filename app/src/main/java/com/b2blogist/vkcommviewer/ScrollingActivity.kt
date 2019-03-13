@@ -21,6 +21,7 @@ class ScrollingActivity : AppCompatActivity() {
     private lateinit var viewAdapter: GroupPageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val quantityOfWallPostToEachLoad = 15
+    private val targetGroupID = 90405472L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +40,9 @@ class ScrollingActivity : AppCompatActivity() {
         //initial load of page
         if (::viewAdapter.isInitialized) viewAdapter.loadInProgress()
         //get group
-        var group = Api.getGroups(arrayListOf(90405472L), null, "cover,contacts,status,members_count,description,site,city")!![0]
+        var group = Api.getGroups(arrayListOf(targetGroupID), null, "cover,contacts,status,members_count,description,site,city")!![0]
         //get wall messages
-        var wallMessages = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, 0, "all")
+        var wallMessages = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, 0, "all")
 
         //fix user links n lines
         convertTextLinksFromVkStyleToWebStyle(wallMessages)
@@ -80,7 +81,7 @@ class ScrollingActivity : AppCompatActivity() {
             //set on load more listener (load and apply new posts)
             viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {
                 override fun onLoadMore() = Thread(Runnable {
-                        var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
+                        var wms = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
                         //fix user links n lines
                         convertTextLinksFromVkStyleToWebStyle(wms)
                         runOnUiThread {
