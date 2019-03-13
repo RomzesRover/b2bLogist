@@ -75,14 +75,12 @@ class ScrollingActivity : AppCompatActivity() {
             }
             //set on load more listener (load and apply new posts)
             viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {
-                override fun onLoadMore() {
-                    Thread(Runnable {
+                override fun onLoadMore() = Thread(Runnable {
                         var wms = Api.getWallMessages(-90405472L, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
                         runOnUiThread {
                             viewAdapter.addWallMessages(wms)
                         }
                     }).start()
-                }
             })
         }
     }
