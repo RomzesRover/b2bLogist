@@ -51,14 +51,14 @@ object Api {
         //determine addresses
         val groupListToReturn = Group.parseGroups(array)
         groupListToReturn.forEach {
-            it.addresses = getGroupAdressesById(it.gid)
+            it.addresses = getGroupAddressesById(it.gid)
         }
         return groupListToReturn
     }
 
     //http://vk.com/dev/groups.getById
     @Throws(IOException::class, JSONException::class)
-    fun getGroupAdressesById(uid: Long?): ArrayList<GroupAddress>? {
+    fun getGroupAddressesById(uid: Long?): ArrayList<GroupAddress>? {
         if (uid == null)
             return null
         val params = Params("groups.getAddresses")
