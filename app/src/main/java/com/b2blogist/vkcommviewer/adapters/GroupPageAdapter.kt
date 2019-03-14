@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_header.view.*
 import kotlinx.android.synthetic.main.group_page_row.view.*
 import kotlinx.android.synthetic.main.simple_link.view.*
+import kotlinx.android.synthetic.main.simple_photo.view.*
 import vk.api.Group
 import vk.api.WallMessage
 import java.text.SimpleDateFormat
@@ -149,6 +150,28 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             view.attachments.removeAllViews()
 
             wallMessage.attachments?.forEach {
+                it.photo?.let {photo ->
+                    val photoView = layoutInflater.inflate(R.layout.simple_photo, view.attachments as ViewGroup, false)
+                    photoView.photo_image.visibility = View.GONE
+                    photo?.photo_sizes?.let { photo_sizes ->
+                        var src = photo_sizes[0].src
+                        var width = photo_sizes[0].width
+                        run breaker@{
+                            photo_sizes.forEach {photo_size ->
+                                if (photo_size.width > width) {
+                                    width = photo_size.width
+                                    src = photo_size.src
+                                    if (width >= targetWidth)
+                                        return@breaker
+                                }
+                            }
+                        }
+                        photoView.photo_image.visibility = View.VISIBLE
+                        Picasso.get().load(src).fit().centerCrop().into(photoView.photo_image)
+                    }
+                    //add to list
+                    view.attachments.addView(photoView)
+                }
                 it.link?.let {link ->
                     //in attachements link found show link block
                     val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
