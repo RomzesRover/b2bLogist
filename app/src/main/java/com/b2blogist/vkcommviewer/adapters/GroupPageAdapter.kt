@@ -1,6 +1,8 @@
 package com.b2blogist.vkcommviewer.adapters
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Html
@@ -140,6 +142,32 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             view.post_date.text = convertLongToTime(wallMessage.date)
             view.post_text.movementMethod = LinkMovementMethod.getInstance()
             view.post_text.text = linkifyHtml(wallMessage.text ?: "No post text", Linkify.ALL)
+
+            wallMessage.attachments?.forEach {
+                it.link?.let {link ->
+                    //in attachements link found show link block
+                    view.link.visibility = View.VISIBLE
+                    link.photo?.photo_sizes?.let { photo_sizes ->
+                        var src = photo_sizes[0].src
+                        var width = photo_sizes[0].width
+                        photo_sizes.forEach {photo_size ->
+                            if (photo_size.width > width) {
+                                width = photo_size.width
+                                src = photo_size.src
+                            }
+                        }
+                        view.link_image.visibility = View.VISIBLE
+                        Picasso.get().load(src).fit().centerCrop().into(view.link_image)
+                    }
+                    view.link_title.text = link.title ?: "No link title"
+                    view.link_url.text = link.url ?: "No link url"
+                    //set link click
+                    view.link.setOnClickListener {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
+                        view.context.startActivity(browserIntent)
+                    }
+                }
+            }
         }
 
         private fun convertLongToTime(time: Long?): String {
