@@ -1,14 +1,36 @@
 package vk.api
 
+import android.os.Parcel
+import android.os.Parcelable
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import vk.api.utils.Utils
 
-class GroupAddress {
+class GroupAddress() : Parcelable {
     var address: String?= null
 
-    companion object {
+    constructor(parcel: Parcel) : this() {
+        address = parcel.readString()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(address)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<GroupAddress> {
+        override fun createFromParcel(parcel: Parcel): GroupAddress {
+            return GroupAddress(parcel)
+        }
+
+        override fun newArray(size: Int): Array<GroupAddress?> {
+            return arrayOfNulls(size)
+        }
+
         @Throws(JSONException::class)
         fun parse(o: JSONObject): GroupAddress{
             val ga = GroupAddress()

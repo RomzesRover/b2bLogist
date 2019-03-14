@@ -1,12 +1,14 @@
 package vk.api
 
+import android.os.Parcel
+import android.os.Parcelable
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import vk.api.utils.Utils
 
 
-class Group {
+class Group() : Parcelable {
     var gid: Long? = null
     var name: String? = null
     var status: String? = null
@@ -33,7 +35,81 @@ class Group {
     var city_name: String? = null//100*100
     var city_id: Int? = null//200*200
 
-    companion object {
+    constructor(parcel: Parcel) : this() {
+        gid = parcel.readValue(Long::class.java.classLoader) as? Long
+        name = parcel.readString()
+        status = parcel.readString()
+        site = parcel.readString()
+        photo = parcel.readString()
+        is_closed = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        is_member = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        photo_medium = parcel.readString()
+        photo_big = parcel.readString()
+        description = parcel.readString()
+        wiki_page = parcel.readString()
+        fixed_post = parcel.readValue(Long::class.java.classLoader) as? Long
+        can_see_all_posts = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        is_admin = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        admin_level = parcel.readValue(Int::class.java.classLoader) as? Int
+        contacts = arrayListOf<Contact>().apply {
+            parcel.readList(this, Contact::class.java.classLoader)
+        }
+        members_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        type = parcel.readValue(Int::class.java.classLoader) as? Int
+        links = arrayListOf<Link>().apply {
+            parcel.readList(this, Link::class.java.classLoader)
+        }
+        cover_Enabled = parcel.readInt()
+        covers = arrayListOf<Cover>().apply {
+            parcel.readList(this, Cover::class.java.classLoader)
+        }
+        addresses = arrayListOf<GroupAddress>().apply {
+            parcel.readList(this, GroupAddress::class.java.classLoader)
+        }
+        city_name = parcel.readString()
+        city_id = parcel.readValue(Int::class.java.classLoader) as? Int
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(gid)
+        parcel.writeString(name)
+        parcel.writeString(status)
+        parcel.writeString(site)
+        parcel.writeString(photo)
+        parcel.writeValue(is_closed)
+        parcel.writeValue(is_member)
+        parcel.writeString(photo_medium)
+        parcel.writeString(photo_big)
+        parcel.writeString(description)
+        parcel.writeString(wiki_page)
+        parcel.writeValue(fixed_post)
+        parcel.writeValue(can_see_all_posts)
+        parcel.writeValue(is_admin)
+        parcel.writeValue(admin_level)
+        parcel.writeList(contacts)
+        parcel.writeValue(members_count)
+        parcel.writeValue(type)
+        parcel.writeList(links)
+        parcel.writeInt(cover_Enabled)
+        parcel.writeList(covers)
+        parcel.writeList(addresses)
+        parcel.writeString(city_name)
+        parcel.writeValue(city_id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Group> {
+        override fun createFromParcel(parcel: Parcel): Group {
+            return Group(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Group?> {
+            return arrayOfNulls(size)
+        }
+
         @Throws(JSONException::class)
         fun parse(o: JSONObject): Group {
             val g = Group()

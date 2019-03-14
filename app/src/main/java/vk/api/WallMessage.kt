@@ -1,11 +1,13 @@
 package vk.api
 
+import android.os.Parcel
+import android.os.Parcelable
 import org.json.JSONException
 import org.json.JSONObject
 import vk.api.utils.Utils
 
 
-class WallMessage{
+class WallMessage() : Parcelable{
     var from_id: Long? = null
     var to_id: Long? = null
     var date: Long? = null
@@ -34,7 +36,67 @@ class WallMessage{
 
     var signer_id: Long? = null
 
-    companion object {
+    constructor(parcel: Parcel) : this() {
+        from_id = parcel.readValue(Long::class.java.classLoader) as? Long
+        to_id = parcel.readValue(Long::class.java.classLoader) as? Long
+        date = parcel.readValue(Long::class.java.classLoader) as? Long
+        post_type = parcel.readInt()
+        text = parcel.readString()
+        isPinned = parcel.readByte() != 0.toByte()
+        id = parcel.readValue(Long::class.java.classLoader) as? Long
+        attachments = arrayListOf<Attachment>().apply {
+            parcel.readList(this, Attachment::class.java.classLoader)
+        }
+        comment_count = parcel.readValue(Long::class.java.classLoader) as? Long
+        comment_can_post = parcel.readByte() != 0.toByte()
+        like_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        user_like = parcel.readByte() != 0.toByte()
+        can_like = parcel.readByte() != 0.toByte()
+        like_can_publish = parcel.readByte() != 0.toByte()
+        reposts_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        user_reposted = parcel.readByte() != 0.toByte()
+        views_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        copy_history = arrayListOf<WallMessage>().apply {
+            parcel.readList(this, WallMessage::class.java.classLoader)
+        }
+        signer_id = parcel.readValue(Long::class.java.classLoader) as? Long
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(from_id)
+        parcel.writeValue(to_id)
+        parcel.writeValue(date)
+        parcel.writeInt(post_type)
+        parcel.writeString(text)
+        parcel.writeByte(if (isPinned) 1 else 0)
+        parcel.writeValue(id)
+        parcel.writeList(attachments)
+        parcel.writeValue(comment_count)
+        parcel.writeByte(if (comment_can_post) 1 else 0)
+        parcel.writeValue(like_count)
+        parcel.writeByte(if (user_like) 1 else 0)
+        parcel.writeByte(if (can_like) 1 else 0)
+        parcel.writeByte(if (like_can_publish) 1 else 0)
+        parcel.writeValue(reposts_count)
+        parcel.writeByte(if (user_reposted) 1 else 0)
+        parcel.writeValue(views_count)
+        parcel.writeList(copy_history)
+        parcel.writeValue(signer_id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<WallMessage> {
+        override fun createFromParcel(parcel: Parcel): WallMessage {
+            return WallMessage(parcel)
+        }
+
+        override fun newArray(size: Int): Array<WallMessage?> {
+            return arrayOfNulls(size)
+        }
+
         @Throws(JSONException::class)
         fun parse(o: JSONObject): WallMessage {
             val wm = WallMessage()

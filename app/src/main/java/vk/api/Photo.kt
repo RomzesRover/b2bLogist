@@ -1,12 +1,14 @@
 package vk.api
 
+import android.os.Parcel
+import android.os.Parcelable
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import vk.api.utils.Utils
 
 
-class Photo {
+class Photo() : Parcelable {
     var pid: Long? = null
     var aid: Long? = null
     var owner_id: String? = null
@@ -29,7 +31,69 @@ class Photo {
     var access_key: String? = null
     var user_id: String? = null //for group
 
-    companion object {
+    constructor(parcel: Parcel) : this() {
+        pid = parcel.readValue(Long::class.java.classLoader) as? Long
+        aid = parcel.readValue(Long::class.java.classLoader) as? Long
+        owner_id = parcel.readString()
+        photo_sizes = arrayListOf<PhotoSize>().apply {
+            parcel.readList(this, PhotoSize::class.java.classLoader)
+        }
+        src = parcel.readString()
+        src_small = parcel.readString()
+        src_big = parcel.readString()
+        src_xbig = parcel.readString()
+        src_xxbig = parcel.readString()
+        src_xxxbig = parcel.readString()
+        phototext = parcel.readString()
+        created = parcel.readValue(Long::class.java.classLoader) as? Long
+        like_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        user_likes = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        comments_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        tags_count = parcel.readValue(Int::class.java.classLoader) as? Int
+        can_comment = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        width = parcel.readInt()
+        height = parcel.readInt()
+        access_key = parcel.readString()
+        user_id = parcel.readString()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(pid)
+        parcel.writeValue(aid)
+        parcel.writeString(owner_id)
+        parcel.writeList(photo_sizes)
+        parcel.writeString(src)
+        parcel.writeString(src_small)
+        parcel.writeString(src_big)
+        parcel.writeString(src_xbig)
+        parcel.writeString(src_xxbig)
+        parcel.writeString(src_xxxbig)
+        parcel.writeString(phototext)
+        parcel.writeValue(created)
+        parcel.writeValue(like_count)
+        parcel.writeValue(user_likes)
+        parcel.writeValue(comments_count)
+        parcel.writeValue(tags_count)
+        parcel.writeValue(can_comment)
+        parcel.writeInt(width)
+        parcel.writeInt(height)
+        parcel.writeString(access_key)
+        parcel.writeString(user_id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Photo> {
+        override fun createFromParcel(parcel: Parcel): Photo {
+            return Photo(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Photo?> {
+            return arrayOfNulls(size)
+        }
+
         @Throws(NumberFormatException::class, JSONException::class)
         fun parse(o: JSONObject): Photo {
             val p = Photo()
@@ -70,13 +134,39 @@ class Photo {
         }
     }
 
-    class PhotoSize{
+    class PhotoSize() : Parcelable{
         var type: String? = null
         var src: String? = null
         var width: Int = 0//0 means value is unknown
         var height: Int = 0//0 means value is unknown
 
-        companion object {
+        constructor(parcel: Parcel) : this() {
+            type = parcel.readString()
+            src = parcel.readString()
+            width = parcel.readInt()
+            height = parcel.readInt()
+        }
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(type)
+            parcel.writeString(src)
+            parcel.writeInt(width)
+            parcel.writeInt(height)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<PhotoSize> {
+            override fun createFromParcel(parcel: Parcel): PhotoSize {
+                return PhotoSize(parcel)
+            }
+
+            override fun newArray(size: Int): Array<PhotoSize?> {
+                return arrayOfNulls(size)
+            }
+
             @Throws(NumberFormatException::class, JSONException::class)
             fun parse (o: JSONObject): PhotoSize{
                 val ps = PhotoSize()
