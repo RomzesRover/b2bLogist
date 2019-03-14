@@ -2,4 +2,5 @@
     <dimen name="app_bar_height">120dp</dimen>
     <dimen name="content_margin">16dp</dimen>
     <dimen name="content_margin_half">8dp</dimen>
+    <dimen name="link_borders_stroke">1dp</dimen>
 </resources>

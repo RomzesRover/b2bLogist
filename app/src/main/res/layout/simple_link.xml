@@ -2,8 +2,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/link"
-
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/content_margin_half"
@@ -16,9 +14,9 @@
         android:id="@+id/link_image"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginRight="1dp"
+        android:layout_marginLeft="@dimen/link_borders_stroke"
+        android:layout_marginTop="@dimen/link_borders_stroke"
+        android:layout_marginRight="@dimen/link_borders_stroke"
         android:visibility="gone" />
 
     <TextView
