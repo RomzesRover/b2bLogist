@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.b2blogist.vkcommviewer.PostCommentsActivity
 import com.b2blogist.vkcommviewer.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_row.view.*
@@ -34,6 +35,9 @@ class WallMessageHolder(private val view: View) : RecyclerView.ViewHolder(view),
 
     override fun onClick(v: View) {
         Log.d("RecyclerView", "CLICK!")
+        var postCommentsIntent = Intent(v.context, PostCommentsActivity::class.java)
+        postCommentsIntent.putExtra("wallMessage", wallMessage)
+        v.context.startActivity(postCommentsIntent)
     }
 
     fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater, targetWidth: Int){

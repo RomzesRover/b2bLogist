@@ -66,7 +66,7 @@ class ScrollingActivity : AppCompatActivity() {
                     if (cover.width > width) {
                         width = cover.width
                         src = cover.src
-                        if (width >= targetWidth)
+                        if (width >= targetWidth*2)
                             return@breaker
                     }
                 }
