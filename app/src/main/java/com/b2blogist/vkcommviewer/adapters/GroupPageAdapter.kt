@@ -169,7 +169,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     photoView.photo_image.visibility = View.GONE
                     photo?.photo_sizes?.let { photo_sizes ->
                         var src: String? = ""
-                        var width = 0
+                        var width = -1
                         run breaker@{
                             photo_sizes.forEach {photo_size ->
                                 if (photo_size.width > width) {
@@ -197,7 +197,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     linkView.link_image.visibility = View.GONE
                     link.photo?.photo_sizes?.let { photo_sizes ->
                         var src: String? = ""
-                        var width = 0
+                        var width = -1
                         run breaker@{
                             photo_sizes.forEach {photo_size ->
                                 if (photo_size.width > width) {
