@@ -27,6 +27,9 @@ class WallMessage{
     var reposts_count: Int? = null
     var user_reposted: Boolean = false
 
+    //views
+    var views_count: Int? = null
+
     var copy_history: ArrayList<WallMessage>? = null
 
     var signer_id: Long? = null
@@ -52,6 +55,10 @@ class WallMessage{
                 wm.user_like = jlikes.optInt("user_likes") == 1
                 wm.can_like = jlikes.optInt("can_like") == 1
                 wm.like_can_publish = jlikes.optInt("can_publish") == 1
+            }
+            if (o.has("views")) {
+                val jviews = o.getJSONObject("views")
+                wm.views_count = jviews.optInt("count")
             }
             val copy_history_json = o.optJSONArray("copy_history")
             if (copy_history_json != null) {
