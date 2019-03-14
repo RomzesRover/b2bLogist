@@ -7,11 +7,14 @@
     android:layout_marginTop="@dimen/content_margin"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:padding="@dimen/content_margin">
+    android:paddingBottom="@dimen/content_margin">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/content_margin"
+        android:paddingTop="@dimen/content_margin"
+        android:paddingRight="@dimen/content_margin">
 
         <ImageView
             android:id="@+id/group_avatar_list"
@@ -61,15 +64,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/group_avatar_list" />
 
-        <LinearLayout
-            android:id="@+id/attachments"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_text" />
-
 
     </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/attachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
 </LinearLayout>
