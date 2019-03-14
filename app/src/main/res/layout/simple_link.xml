@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/content_margin"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="@dimen/content_margin_half"
     android:layout_marginRight="@dimen/content_margin"
     android:background="@drawable/link_borders"
     android:orientation="vertical">
@@ -25,9 +25,9 @@
         android:id="@+id/link_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/content_margin_half"
+        android:layout_marginTop="@dimen/content_margin_half"
+        android:layout_marginRight="@dimen/content_margin_half"
         android:ellipsize="end"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
@@ -36,9 +36,9 @@
         android:id="@+id/link_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/content_margin_half"
+        android:layout_marginRight="@dimen/content_margin_half"
+        android:layout_marginBottom="@dimen/content_margin_half"
         android:ellipsize="end"
         android:singleLine="true" />
 </LinearLayout>

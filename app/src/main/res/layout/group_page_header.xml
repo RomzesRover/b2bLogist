@@ -24,7 +24,7 @@
             android:id="@+id/linearLayout2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/content_margin_half"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/group_avatar"
             app:layout_constraintEnd_toStartOf="@+id/group_avatar"
@@ -53,7 +53,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/content_margin_half"
             android:shrinkColumns="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
