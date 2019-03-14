@@ -156,6 +156,11 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     Picasso.get().load(video.image_big).fit().centerCrop().into(videoView.video_image)
                     videoView.video_title.text = video.title ?: "No video name"
                     videoView.video_views.text = (video.views?.toString() ?: "No videos").plus(" views")
+                    //set video click
+                    videoView.video.setOnClickListener {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://m.vk.com/video${video.owner_id}_${video.vid}"))
+                        videoView.context.startActivity(browserIntent)
+                    }
                     //add to list
                     view.attachments.addView(videoView)
                 }
@@ -177,6 +182,11 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                         }
                         photoView.photo_image.visibility = View.VISIBLE
                         Picasso.get().load(src).fit().centerCrop().into(photoView.photo_image)
+                    }
+                    //set photo click
+                    photoView.photo.setOnClickListener {
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://m.vk.com/photo${photo.owner_id}_${photo.pid}"))
+                        photoView.context.startActivity(browserIntent)
                     }
                     //add to list
                     view.attachments.addView(photoView)
