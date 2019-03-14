@@ -1,6 +1,7 @@
 package com.b2blogist.vkcommviewer
 
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -22,6 +23,7 @@ class ScrollingActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val quantityOfWallPostToEachLoad = 15
     private val targetGroupID = 90405472L
+    private var targetWidth: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,12 @@ class ScrollingActivity : AppCompatActivity() {
         swiperefresh.setOnRefreshListener {
             updateOperation()
         }
+
+        //init images size targeted width
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        targetWidth = size.x / 2
 
         //start update on activity open
         swiperefresh.isRefreshing = true
@@ -71,7 +79,7 @@ class ScrollingActivity : AppCompatActivity() {
             viewAdapter.setNewWallMessages(wallMessages)
         } else {
             //init recycle view
-            viewAdapter = GroupPageAdapter(this, group, wallMessages, quantityOfWallPostToEachLoad)
+            viewAdapter = GroupPageAdapter(this, group, wallMessages, quantityOfWallPostToEachLoad, targetWidth)
             viewManager = LinearLayoutManager(this)
             recycler_view.apply {
                 setHasFixedSize(true)

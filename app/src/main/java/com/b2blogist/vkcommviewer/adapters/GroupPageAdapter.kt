@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>, private val quantityOfWallPostToEachLoad: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>, private val quantityOfWallPostToEachLoad: Int, private val targetWidth: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
     private val visibleThreshold = 5
     private var lastVisibleItem: Int? = null
@@ -91,7 +91,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             holder.bindHeader(group)
         } else {
             if (holder is WallMessageHolder) {
-                holder.bindWallMessage(group, wallMessages[position-1], layoutInflater)
+                holder.bindWallMessage(group, wallMessages[position-1], layoutInflater, targetWidth)
             }
         }
     }
@@ -136,7 +136,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             Log.d("RecyclerView", "CLICK!")
         }
 
-        fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater){
+        fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater, targetWidth: Int){
             this.group = group
             this.wallMessage = wallMessage
 
@@ -156,10 +156,14 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     link.photo?.photo_sizes?.let { photo_sizes ->
                         var src = photo_sizes[0].src
                         var width = photo_sizes[0].width
-                        photo_sizes.forEach {photo_size ->
-                            if (photo_size.width > width) {
-                                width = photo_size.width
-                                src = photo_size.src
+                        run breaker@{
+                            photo_sizes.forEach {photo_size ->
+                                if (photo_size.width > width) {
+                                    width = photo_size.width
+                                    src = photo_size.src
+                                    if (width >= targetWidth)
+                                        return@breaker
+                                }
                             }
                         }
                         linkView.link_image.visibility = View.VISIBLE
