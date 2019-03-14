@@ -19,6 +19,7 @@ import com.b2blogist.vkcommviewer.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_header.view.*
 import kotlinx.android.synthetic.main.group_page_row.view.*
+import kotlinx.android.synthetic.main.simple_link.view.*
 import vk.api.Group
 import vk.api.WallMessage
 import java.text.SimpleDateFormat
@@ -33,6 +34,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
     private var onLoadMoreListener: OnLoadMoreListener? = null
     private var isLoading: Boolean = false
     private var isEndOfListReached: Boolean = false
+    private lateinit var layoutInflater: LayoutInflater
 
     fun setOnLoadMoreListener(recyclerView: RecyclerView, mOnLoadMoreListener: OnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener
@@ -75,9 +77,10 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        layoutInflater = LayoutInflater.from(context)
         return when(viewType){
-            TYPE_HEADER -> HeaderHolder(LayoutInflater.from(context).inflate(R.layout.group_page_header, parent, false))
-            else -> WallMessageHolder(LayoutInflater.from(context).inflate(R.layout.group_page_row, parent, false))
+            TYPE_HEADER -> HeaderHolder(layoutInflater.inflate(R.layout.group_page_header, parent, false))
+            else -> WallMessageHolder(layoutInflater.inflate(R.layout.group_page_row, parent, false))
         }
     }
 
@@ -88,7 +91,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             holder.bindHeader(group)
         } else {
             if (holder is WallMessageHolder) {
-                holder.bindWallMessage(group, wallMessages[position-1])
+                holder.bindWallMessage(group, wallMessages[position-1], layoutInflater)
             }
         }
     }
@@ -133,7 +136,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             Log.d("RecyclerView", "CLICK!")
         }
 
-        fun bindWallMessage(group: Group, wallMessage: WallMessage){
+        fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater){
             this.group = group
             this.wallMessage = wallMessage
 
@@ -143,10 +146,12 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             view.post_text.movementMethod = LinkMovementMethod.getInstance()
             view.post_text.text = linkifyHtml(wallMessage.text ?: "No post text", Linkify.ALL)
 
+            view.attachments.removeAllViews()
+
             wallMessage.attachments?.forEach {
                 it.link?.let {link ->
                     //in attachements link found show link block
-                    view.link.visibility = View.VISIBLE
+                    val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
                     link.photo?.photo_sizes?.let { photo_sizes ->
                         var src = photo_sizes[0].src
                         var width = photo_sizes[0].width
@@ -156,16 +161,18 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                                 src = photo_size.src
                             }
                         }
-                        view.link_image.visibility = View.VISIBLE
-                        Picasso.get().load(src).fit().centerCrop().into(view.link_image)
+                        linkView.link_image.visibility = View.VISIBLE
+                        Picasso.get().load(src).fit().centerCrop().into(linkView.link_image)
                     }
-                    view.link_title.text = link.title ?: "No link title"
-                    view.link_url.text = link.url ?: "No link url"
+                    linkView.link_title.text = link.title ?: "No link title"
+                    linkView.link_url.text = link.url ?: "No link url"
                     //set link click
-                    view.link.setOnClickListener {
+                    linkView.link.setOnClickListener {
                         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
-                        view.context.startActivity(browserIntent)
+                        linkView.context.startActivity(browserIntent)
                     }
+                    //add to list
+                    view.attachments.addView(linkView)
                 }
             }
         }
