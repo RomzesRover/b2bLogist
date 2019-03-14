@@ -10,6 +10,7 @@ class Link {
     var title: String? = null
     var description: String? = null
     var image_src: String? = null
+    var photo: Photo? = null
 
     companion object {
         @Throws(NumberFormatException::class, JSONException::class)
@@ -18,7 +19,8 @@ class Link {
             link.url = o.optString("url")
             link.title = Utils.unescape(o.optString("title"))
             link.description = Utils.unescape(o.optString("description"))
-            link.image_src = o.optString("image_src")
+            if (o.has("photo"))
+                link.photo = Photo.parse(o.optJSONObject("photo"))
             return link
         }
 
