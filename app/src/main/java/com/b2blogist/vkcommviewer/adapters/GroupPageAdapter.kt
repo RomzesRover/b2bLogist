@@ -147,6 +147,10 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             view.post_date.text = convertLongToTime(wallMessage.date)
             view.post_text.movementMethod = LinkMovementMethod.getInstance()
             view.post_text.text = linkifyHtml(wallMessage.text ?: "No post text", Linkify.ALL)
+            view.likes.text = wallMessage.like_count?.toString() ?: "0"
+            view.comments.text = wallMessage.comment_count?.toString() ?: "0"
+            view.shares.text = wallMessage.reposts_count?.toString() ?: "0"
+            view.views.text = wallMessage.views_count?.toString() ?: "0"
 
             view.attachments.removeAllViews()
 

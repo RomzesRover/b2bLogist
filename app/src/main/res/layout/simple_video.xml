@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/content_margin_half"
         android:layout_marginRight="@dimen/content_margin_half"
-        android:layout_marginBottom="@dimen/content_margin_half"
         android:ellipsize="end"
         android:singleLine="true" />
 </LinearLayout>
