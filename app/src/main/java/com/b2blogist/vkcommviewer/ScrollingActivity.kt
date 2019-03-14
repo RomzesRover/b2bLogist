@@ -59,7 +59,19 @@ class ScrollingActivity : AppCompatActivity() {
             //set group name as title
             toolbar_layout.title = group.name
             //set group covers as background for toolbar
-            Picasso.get().load(group.covers?.last()?.src).resize(toolbar_layout.width, toolbar_layout.height).centerCrop().into(object  : com.squareup.picasso.Target{
+            var src: String? = ""
+            var width = -1
+            run breaker@{
+                group.covers?.forEach {cover ->
+                    if (cover.width > width) {
+                        width = cover.width
+                        src = cover.src
+                        if (width >= targetWidth)
+                            return@breaker
+                    }
+                }
+            }
+            Picasso.get().load(src).resize(toolbar_layout.width, toolbar_layout.height).centerCrop().into(object  : com.squareup.picasso.Target{
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) { }
                 override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) { }
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
