@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/link_image"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="150dp"
         android:layout_marginLeft="@dimen/link_borders_stroke"
         android:layout_marginTop="@dimen/link_borders_stroke"
         android:layout_marginRight="@dimen/link_borders_stroke"
