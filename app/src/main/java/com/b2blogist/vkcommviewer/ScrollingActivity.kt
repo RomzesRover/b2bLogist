@@ -53,7 +53,7 @@ class ScrollingActivity : AppCompatActivity() {
         var wallMessages = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, 0, "all")
 
         //fix user links n lines
-        convertTextLinksFromVkStyleToWebStyle(wallMessages)
+        convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wallMessages)
 
         runOnUiThread {
             //set group name as title
@@ -91,7 +91,7 @@ class ScrollingActivity : AppCompatActivity() {
                 override fun onLoadMore() = Thread(Runnable {
                         var wms = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
                         //fix user links n lines
-                        convertTextLinksFromVkStyleToWebStyle(wms)
+                        convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wms)
                         runOnUiThread {
                             viewAdapter.addWallMessages(wms)
                         }
@@ -100,7 +100,7 @@ class ScrollingActivity : AppCompatActivity() {
         }
     }
 
-    private fun convertTextLinksFromVkStyleToWebStyle(wms: ArrayList<WallMessage>): ArrayList<WallMessage>{
+    private fun convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wms: ArrayList<WallMessage>): ArrayList<WallMessage>{
         wms.forEach {
             var tempResult: String? = null
             it.text?.let { it1 ->
@@ -114,6 +114,14 @@ class ScrollingActivity : AppCompatActivity() {
                 tempResult = sb.toString()
             }
             it.text = tempResult?.replace("\n", "<br />")
+            it.attachments?.forEach {attachment ->
+                attachment.link?.let {link ->
+                    link.photo?.photo_sizes?.sortBy { photo_size -> photo_size.width }
+                }
+                attachment.photo?.let {photo ->
+                    photo?.photo_sizes?.sortBy { photo_size -> photo_size.width }
+                }
+            }
         }
         return wms
     }

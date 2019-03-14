@@ -168,8 +168,8 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     val photoView = layoutInflater.inflate(R.layout.simple_photo, view.attachments as ViewGroup, false)
                     photoView.photo_image.visibility = View.GONE
                     photo?.photo_sizes?.let { photo_sizes ->
-                        var src = photo_sizes[0].src
-                        var width = photo_sizes[0].width
+                        var src: String? = ""
+                        var width = 0
                         run breaker@{
                             photo_sizes.forEach {photo_size ->
                                 if (photo_size.width > width) {
@@ -196,8 +196,8 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
                     linkView.link_image.visibility = View.GONE
                     link.photo?.photo_sizes?.let { photo_sizes ->
-                        var src = photo_sizes[0].src
-                        var width = photo_sizes[0].width
+                        var src: String? = ""
+                        var width = 0
                         run breaker@{
                             photo_sizes.forEach {photo_size ->
                                 if (photo_size.width > width) {
