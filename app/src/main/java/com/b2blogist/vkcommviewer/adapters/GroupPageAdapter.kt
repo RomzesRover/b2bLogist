@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.group_page_header.view.*
 import kotlinx.android.synthetic.main.group_page_row.view.*
 import kotlinx.android.synthetic.main.simple_link.view.*
 import kotlinx.android.synthetic.main.simple_photo.view.*
+import kotlinx.android.synthetic.main.simple_video.view.*
 import vk.api.Group
 import vk.api.WallMessage
 import java.text.SimpleDateFormat
@@ -150,6 +151,14 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             view.attachments.removeAllViews()
 
             wallMessage.attachments?.forEach {
+                it.video?.let { video ->
+                    val videoView = layoutInflater.inflate(R.layout.simple_video, view.attachments as ViewGroup, false)
+                    Picasso.get().load(video.image_big).fit().centerCrop().into(videoView.video_image)
+                    videoView.video_title.text = video.title ?: "No video name"
+                    videoView.video_views.text = (video.views?.toString() ?: "No videos").plus(" views")
+                    //add to list
+                    view.attachments.addView(videoView)
+                }
                 it.photo?.let {photo ->
                     val photoView = layoutInflater.inflate(R.layout.simple_photo, view.attachments as ViewGroup, false)
                     photoView.photo_image.visibility = View.GONE
