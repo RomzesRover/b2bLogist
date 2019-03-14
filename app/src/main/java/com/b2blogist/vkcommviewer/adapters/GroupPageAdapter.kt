@@ -152,6 +152,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                 it.link?.let {link ->
                     //in attachements link found show link block
                     val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
+                    linkView.link_image.visibility = View.GONE
                     link.photo?.photo_sizes?.let { photo_sizes ->
                         var src = photo_sizes[0].src
                         var width = photo_sizes[0].width
