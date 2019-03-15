@@ -39,22 +39,32 @@ class PostCommentsActivity : AppCompatActivity() {
     }
 
     private fun updateOperation() = Thread(Runnable {
-        //initial load of page
-        if (::viewAdapter.isInitialized) viewAdapter.loadInProgress()
-        //get post n group
-        var wms = intent.getParcelableExtra<WallMessage>("wallMessage")
-        var group = intent.getParcelableExtra<Group>("group")
-        //get comments
-        var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, quantityOfCommentsToEachLoad, 0, true)
+        try {
+            //initial load of page
+            if (::viewAdapter.isInitialized) viewAdapter.loadInProgress()
+            //get post n group
+            var wms = intent.getParcelableExtra<WallMessage>("wallMessage")
+            var group = intent.getParcelableExtra<Group>("group")
+            //get comments
+            var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, quantityOfCommentsToEachLoad, 0, true)
 
-        //fix user links
-        convertTextLinksFromVkStyleToWebStyle(comments.comments!!)
+            //fix user links
+            convertTextLinksFromVkStyleToWebStyle(comments.comments!!)
 
-        runOnUiThread {
-            //update adapter for recycler view
-            initRecycleView(wms, group, comments)
-            //stop refresh animation
-            swiperefresh.isRefreshing = false
+            runOnUiThread {
+                //update adapter for recycler view
+                initRecycleView(wms, group, comments)
+                //stop refresh animation
+                swiperefresh.isRefreshing = false
+            }
+        } catch (e: java.lang.Exception){
+            runOnUiThread {
+                //stop refresh animation
+                swiperefresh.isRefreshing = false
+                Toast.makeText(applicationContext, R.string.error_on_load, Toast.LENGTH_LONG).show()
+                viewAdapter.loadIsFailed()
+            }
+            e.printStackTrace()
         }
     }).start()
 
@@ -74,6 +84,25 @@ class PostCommentsActivity : AppCompatActivity() {
                 adapter = viewAdapter
                 addItemDecoration(dividerItemDecoration)
             }
+            //set on load more listener (load and apply new posts)
+            viewAdapter.setOnLoadMoreListener(recycler_view, object : PostCommentsAdapter.OnLoadMoreListener {
+                override fun onLoadMore() = Thread(Runnable {
+                    try {
+                        var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, quantityOfCommentsToEachLoad, viewAdapter.itemCount-1, true)
+                        //fix user links n lines
+                        convertTextLinksFromVkStyleToWebStyle(comments.comments!!)
+                        runOnUiThread {
+                            viewAdapter.addComments(comments)
+                        }
+                    } catch (e: java.lang.Exception){
+                        runOnUiThread {
+                            Toast.makeText(applicationContext, R.string.error_on_load, Toast.LENGTH_LONG).show()
+                            viewAdapter.loadIsFailed()
+                        }
+                        e.printStackTrace()
+                    }
+                }).start()
+            })
         }
     }
 

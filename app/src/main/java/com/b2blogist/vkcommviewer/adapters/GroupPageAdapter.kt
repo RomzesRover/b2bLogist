@@ -45,6 +45,10 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
         isLoading = true
     }
 
+    fun loadIsFailed(){
+        isLoading = false
+    }
+
     fun addWallMessages(wallMessages: ArrayList<WallMessage>){
         this.wallMessages.addAll(wallMessages)
         notifyDataSetChanged()

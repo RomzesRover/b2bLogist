@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.Toast
 import com.b2blogist.vkcommviewer.adapters.GroupPageAdapter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_scrolling.*
@@ -46,43 +47,60 @@ class ScrollingActivity : AppCompatActivity() {
     }
 
     private fun updateOperation() = Thread(Runnable {
-        //initial load of page
-        if (::viewAdapter.isInitialized) viewAdapter.loadInProgress()
-        //get group
-        var group = Api.getGroups(arrayListOf(targetGroupID), null, "cover,contacts,status,members_count,description,site,city")!![0]
-        //get wall messages
-        var wallMessages = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, 0, "all")
+        try {
+            //initial load of page
+            if (::viewAdapter.isInitialized) viewAdapter.loadInProgress()
+            //get group
+            var group = Api.getGroups(
+                arrayListOf(targetGroupID),
+                null,
+                "cover,contacts,status,members_count,description,site,city"
+            )!![0]
+            //get wall messages
+            var wallMessages =
+                Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, 0, "all")
 
-        //fix user links n lines
-        convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wallMessages)
+            //fix user links n lines
+            convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wallMessages)
 
-        runOnUiThread {
-            //set group name as title
-            toolbar_layout.title = group.name
-            //set group covers as background for toolbar
-            var src: String? = ""
-            var width = -1
-            run breaker@{
-                group.covers?.forEach {cover ->
-                    if (cover.width > width) {
-                        width = cover.width
-                        src = cover.src
-                        if (width >= targetWidth*2)
-                            return@breaker
+            runOnUiThread {
+                //set group name as title
+                toolbar_layout.title = group.name
+                //set group covers as background for toolbar
+                var src: String? = ""
+                var width = -1
+                run breaker@{
+                    group.covers?.forEach { cover ->
+                        if (cover.width > width) {
+                            width = cover.width
+                            src = cover.src
+                            if (width >= targetWidth)
+                                return@breaker
+                        }
                     }
                 }
+                Picasso.get().load(src).resize(toolbar_layout.width, toolbar_layout.height)
+                    .centerCrop().into(object : com.squareup.picasso.Target {
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        toolbar_layout.background =
+                            BitmapDrawable(applicationContext.resources, bitmap)
+                    }
+                })
+                //update adapter for recycler view
+                initRecycleView(group, wallMessages)
+                //stop refresh animation
+                swiperefresh.isRefreshing = false
             }
-            Picasso.get().load(src).resize(toolbar_layout.width, toolbar_layout.height).centerCrop().into(object  : com.squareup.picasso.Target{
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) { }
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) { }
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    toolbar_layout.background = BitmapDrawable(applicationContext.resources, bitmap)
-                }
-            })
-            //update adapter for recycler view
-            initRecycleView(group, wallMessages)
-            //stop refresh animation
-            swiperefresh.isRefreshing = false
+        } catch (e: java.lang.Exception){
+            runOnUiThread {
+                //stop refresh animation
+                swiperefresh.isRefreshing = false
+                Toast.makeText(applicationContext, R.string.error_on_load, Toast.LENGTH_LONG).show()
+                viewAdapter.loadIsFailed()
+            }
+            e.printStackTrace()
         }
     }).start()
 
@@ -105,12 +123,20 @@ class ScrollingActivity : AppCompatActivity() {
             //set on load more listener (load and apply new posts)
             viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {
                 override fun onLoadMore() = Thread(Runnable {
+                    try {
                         var wms = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
                         //fix user links n lines
                         convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wms)
                         runOnUiThread {
                             viewAdapter.addWallMessages(wms)
                         }
+                    } catch (e: java.lang.Exception){
+                        runOnUiThread {
+                            Toast.makeText(applicationContext, R.string.error_on_load, Toast.LENGTH_LONG).show()
+                            viewAdapter.loadIsFailed()
+                        }
+                        e.printStackTrace()
+                    }
                     }).start()
             })
         }

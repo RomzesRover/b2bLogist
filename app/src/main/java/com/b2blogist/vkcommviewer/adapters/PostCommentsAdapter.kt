@@ -44,6 +44,10 @@ class PostCommentsAdapter(private val context: Context, private var group: Group
         isLoading = true
     }
 
+    fun loadIsFailed(){
+        isLoading = false
+    }
+
     fun addComments(comments: Comments){
         this.comments.comments?.addAll(comments.comments as ArrayList<Comment>)
         this.comments.users?.addAll(comments.users as ArrayList<User>)
