@@ -9,7 +9,6 @@ import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
 import android.text.util.Linkify
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +33,9 @@ class WallMessageHolder(private val view: View) : RecyclerView.ViewHolder(view),
     }
 
     override fun onClick(v: View) {
-        Log.d("RecyclerView", "CLICK!")
         var postCommentsIntent = Intent(v.context, PostCommentsActivity::class.java)
         postCommentsIntent.putExtra("wallMessage", wallMessage)
+        postCommentsIntent.putExtra("group", group)
         v.context.startActivity(postCommentsIntent)
     }
 

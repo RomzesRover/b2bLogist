@@ -112,7 +112,7 @@ class ScrollingActivity : AppCompatActivity() {
         }
     }
 
-    private fun convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wms: ArrayList<WallMessage>): ArrayList<WallMessage>{
+    private fun convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wms: ArrayList<WallMessage>){
         wms.forEach {
             var tempResult: String? = null
             it.text?.let { it1 ->
@@ -135,6 +135,5 @@ class ScrollingActivity : AppCompatActivity() {
                 }
             }
         }
-        return wms
     }
 }
