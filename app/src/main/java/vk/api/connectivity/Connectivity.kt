@@ -14,20 +14,19 @@ import java.util.zip.GZIPInputStream
 
 object Connectivity {
     private val BASE_URL = "https://api.vk.com/method/"
-    private val API_VERSION = "5.92"
     private val TAG = "VKAPI"
     private var enable_compression = true
     private val accessToken = "476d1af3476d1af3476d1af3c5470402c64476d476d1af31b13955079b57e24d50dcd87"
 
     @Throws(IOException::class, JSONException::class)
-    fun sendRequest(params: Params): JSONObject {
-        return sendRequest(params, false)
+    fun sendRequest(params: Params, apiVersion: String): JSONObject {
+        return sendRequest(params, false, apiVersion)
     }
 
     private val MAX_TRIES = 3
     @Throws(IOException::class, JSONException::class)
-    private fun sendRequest(params: Params, is_post: Boolean): JSONObject {
-        val url = getSignedUrl(params, is_post)
+    private fun sendRequest(params: Params, is_post: Boolean, apiVersion: String): JSONObject {
+        val url = getSignedUrl(params, is_post, apiVersion)
         var body = ""
         if (is_post)
             body = params.getParamsString()
@@ -91,10 +90,10 @@ object Connectivity {
         }
     }
 
-    private fun getSignedUrl(params: Params, is_post: Boolean): String {
+    private fun getSignedUrl(params: Params, is_post: Boolean, apiVersion: String): String {
         params.put("access_token", accessToken)
         if (!params.contains("v"))
-            params.put("v", API_VERSION)
+            params.put("v", apiVersion)
 
         var args = ""
         if (!is_post)

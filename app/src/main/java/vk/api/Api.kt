@@ -9,6 +9,9 @@ import java.io.IOException
 
 
 object Api {
+    private val API_VERSION = "5.92"
+    private val API_VERSION_OLD = "5.52"
+
     //http://vk.com/dev/wall.get
     @Throws(IOException::class, JSONException::class)
     fun getWallMessages(owner_id: Long?, count: Int, offset: Int, filter: String): ArrayList<WallMessage> {
@@ -18,7 +21,7 @@ object Api {
             params.put("count", count)
         params.put("offset", offset)
         params.put("filter", filter) //owner, others, all - default
-        val root = Connectivity.sendRequest(params)
+        val root = Connectivity.sendRequest(params, API_VERSION)
         val response = root.optJSONObject("response")
         val array = response.optJSONArray("items")
         val wmessages = ArrayList<WallMessage>()
@@ -46,7 +49,7 @@ object Api {
             str_uids = domain
         params.put("group_ids", str_uids)
         params.put("fields", fields ?: "")
-        val root = Connectivity.sendRequest(params)
+        val root = Connectivity.sendRequest(params, API_VERSION)
         val array = root.optJSONArray("response")
         //determine addresses
         val groupListToReturn = Group.parseGroups(array)
@@ -63,8 +66,25 @@ object Api {
             return null
         val params = Params("groups.getAddresses")
         params.put("group_id", uid)
-        val root = Connectivity.sendRequest(params)
+        val root = Connectivity.sendRequest(params, API_VERSION)
         val array = root.optJSONObject("response").optJSONArray("items")
         return GroupAddress.parseGroupAddresses(array)
+    }
+
+    //http://vk.com/dev/wall.getComments
+    @Throws(IOException::class, JSONException::class)
+    fun getCommentsOldApi(owner_id: Long?, post_id: Long?, count: Int, offset: Int, extended: Boolean): Comments? {
+        if (owner_id == null || post_id == null)
+            return null
+        val params = Params("wall.getComments")
+        params.put("owner_id", owner_id)
+        params.put("post_id", post_id)
+        if (count > 0)
+            params.put("count", count)
+        params.put("offset", offset)
+        params.put("extended", if (extended) 1 else 0)
+        val root = Connectivity.sendRequest(params, API_VERSION_OLD)
+        val response = root.optJSONObject("response")
+        return Comments.parse(response)
     }
 }
