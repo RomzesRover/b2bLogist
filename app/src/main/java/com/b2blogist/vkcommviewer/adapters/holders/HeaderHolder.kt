@@ -7,20 +7,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_header.view.*
 import vk.api.Group
 
-class HeaderHolder(private val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener{
-    private var group: Group? = null
-
-    init {
-        view.setOnClickListener(this)
-    }
-
-    override fun onClick(v: View) {
-        Log.d("RecyclerView", "CLICK!")
-    }
-
+class HeaderHolder(private val view: View) : RecyclerView.ViewHolder(view){
     fun bindHeader(group: Group){
-        this.group = group
-
         view.group_name.text = group.name ?: "No group name"
         view.group_status.text = group.status ?: "No group status"
         Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_avatar)
