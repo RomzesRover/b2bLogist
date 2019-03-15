@@ -15,7 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PostCommentsActivity"></activity>
+        <activity
+            android:name=".PostCommentsActivity"
+            android:label="@string/post"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/app_name"
