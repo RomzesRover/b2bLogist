@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.b2blogist.vkcommviewer.adapters.GroupPageAdapter
@@ -93,10 +94,13 @@ class ScrollingActivity : AppCompatActivity() {
             //init recycle view
             viewAdapter = GroupPageAdapter(this, group, wallMessages, quantityOfWallPostToEachLoad, targetWidth)
             viewManager = LinearLayoutManager(this)
+            val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+            dividerItemDecoration.setDrawable(this.getDrawable(R.drawable.divider)!!)
             recycler_view.apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager
                 adapter = viewAdapter
+                addItemDecoration(dividerItemDecoration)
             }
             //set on load more listener (load and apply new posts)
             viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {

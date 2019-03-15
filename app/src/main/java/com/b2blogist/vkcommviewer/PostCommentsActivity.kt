@@ -3,6 +3,7 @@ package com.b2blogist.vkcommviewer
 import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
@@ -65,10 +66,13 @@ class PostCommentsActivity : AppCompatActivity() {
             //init recycle view
             viewAdapter = PostCommentsAdapter(this, group, wms, comments, quantityOfCommentsToEachLoad, targetWidth)
             viewManager = LinearLayoutManager(this)
+            val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+            dividerItemDecoration.setDrawable(this.getDrawable(R.drawable.divider)!!)
             recycler_view.apply {
                 setHasFixedSize(true)
                 layoutManager = viewManager
                 adapter = viewAdapter
+                addItemDecoration(dividerItemDecoration)
             }
         }
     }
