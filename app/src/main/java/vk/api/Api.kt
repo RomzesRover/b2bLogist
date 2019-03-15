@@ -73,9 +73,7 @@ object Api {
 
     //http://vk.com/dev/wall.getComments
     @Throws(IOException::class, JSONException::class)
-    fun getCommentsOldApi(owner_id: Long?, post_id: Long?, count: Int, offset: Int, extended: Boolean): Comments? {
-        if (owner_id == null || post_id == null)
-            return null
+    fun getCommentsOldApi(owner_id: Long, post_id: Long, count: Int, offset: Int, extended: Boolean): Comments {
         val params = Params("wall.getComments")
         params.put("owner_id", owner_id)
         params.put("post_id", post_id)

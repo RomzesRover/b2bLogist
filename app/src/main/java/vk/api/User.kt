@@ -64,8 +64,10 @@ class User() : Parcelable {
             u.sex = o.getInt("sex")
             u.screen_name = Utils.unescape(o.getString("screen_name"))
             u.photo_50 = o.optString("photo_50")
-            u.photo_100 = o.optString("photo_100")
-            u.photo_200 = o.optString("photo_200")
+            if (o.has("photo_100"))
+                u.photo_100 = o.optString("photo_100")
+            if (o.has("photo_200"))
+                u.photo_200 = o.optString("photo_200")
             u.online = o.getInt("online")
             return u
         }

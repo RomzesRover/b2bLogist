@@ -118,8 +118,10 @@ class Group() : Parcelable {
             g.status = Utils.unescape(if (o.has("status")) o.getString("status") else null)
             g.site = Utils.unescape(if (o.has("site")) o.getString("site") else null)
             g.photo = o.optString("photo_50")
-            g.photo_medium = o.optString("photo_100")
-            g.photo_big = o.optString("photo_200")
+            if (o.has("photo_200"))
+                g.photo_medium = o.optString("photo_100")
+            if (o.has("photo_200"))
+                g.photo_big = o.optString("photo_200")
             val is_closed = o.optString("is_closed")
             if (is_closed != null)
                 g.is_closed = is_closed == "1"
