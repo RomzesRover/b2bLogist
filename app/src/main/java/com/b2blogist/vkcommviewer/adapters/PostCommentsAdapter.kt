@@ -72,7 +72,7 @@ class PostCommentsAdapter(private val context: Context, private var group: Group
                     R.layout.group_page_row,
                     parent,
                     false
-                )
+                ), true
             )
             else -> CommentHolder(
                 layoutInflater.inflate(

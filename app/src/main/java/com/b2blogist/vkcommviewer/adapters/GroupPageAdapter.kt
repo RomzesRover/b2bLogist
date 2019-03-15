@@ -78,7 +78,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
                     R.layout.group_page_row,
                     parent,
                     false
-                )
+                ), false
             )
         }
     }

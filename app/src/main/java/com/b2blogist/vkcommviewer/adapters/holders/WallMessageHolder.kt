@@ -24,7 +24,7 @@ import vk.api.WallMessage
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WallMessageHolder(private val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener{
+class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : RecyclerView.ViewHolder(view), View.OnClickListener{
     private var wallMessage: WallMessage? = null
     private var group: Group? = null
 
@@ -33,10 +33,12 @@ class WallMessageHolder(private val view: View) : RecyclerView.ViewHolder(view),
     }
 
     override fun onClick(v: View) {
-        var postCommentsIntent = Intent(v.context, PostCommentsActivity::class.java)
-        postCommentsIntent.putExtra("wallMessage", wallMessage)
-        postCommentsIntent.putExtra("group", group)
-        v.context.startActivity(postCommentsIntent)
+        if (!isOnTop) {
+            var postCommentsIntent = Intent(v.context, PostCommentsActivity::class.java)
+            postCommentsIntent.putExtra("wallMessage", wallMessage)
+            postCommentsIntent.putExtra("group", group)
+            v.context.startActivity(postCommentsIntent)
+        }
     }
 
     fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater, targetWidth: Int){
