@@ -43,6 +43,7 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
         this.group = group
         this.user = user
 
+        view.comment_text.setOnClickListener(this)
         view.comment_text.movementMethod = LinkMovementMethod.getInstance()
         view.comment_text.text = linkifyHtml(comment.text ?: "No comments", Linkify.ALL)
         view.comment_date.text = convertLongToTime(comment.date)

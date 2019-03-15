@@ -46,6 +46,7 @@ class WallMessageHolder(private val view: View) : RecyclerView.ViewHolder(view),
         Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_avatar_list)
         view.group_name_list.text = group.name ?: "No group name"
         view.post_date.text = convertLongToTime(wallMessage.date)
+        view.post_text.setOnClickListener(this)
         view.post_text.movementMethod = LinkMovementMethod.getInstance()
         view.post_text.text = linkifyHtml(wallMessage.text ?: "No post text", Linkify.ALL)
         view.likes.text = wallMessage.like_count?.toString() ?: "0"
