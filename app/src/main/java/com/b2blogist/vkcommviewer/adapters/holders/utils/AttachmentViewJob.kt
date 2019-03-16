@@ -2,18 +2,44 @@ package com.b2blogist.vkcommviewer.adapters.holders.utils
 
 import android.content.Intent
 import android.net.Uri
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import com.b2blogist.vkcommviewer.R
 import com.b2blogist.vkcommviewer.targets.Targets
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.simple_link.view.*
 import kotlinx.android.synthetic.main.simple_photo.view.*
 import kotlinx.android.synthetic.main.simple_video.view.*
+import vk.api.Attachment
 import vk.api.Link
 import vk.api.Photo
 import vk.api.Video
 
 object AttachmentViewJob {
-    fun setUpVideoAttachment(videoView: View, video: Video): View{
+    fun doAttachmentsJob(attachments: ArrayList<Attachment>?, parent: View, layoutInflater: LayoutInflater){
+        (parent as ViewGroup).removeAllViews()
+        attachments?.forEach {
+            it.video?.let { video ->
+                val videoView = layoutInflater.inflate(R.layout.simple_video, parent, false)
+                //add to list
+                parent.addView(AttachmentViewJob.setUpVideoAttachment(videoView, video))
+            }
+            it.photo?.let {photo ->
+                val photoView = layoutInflater.inflate(R.layout.simple_photo, parent, false)
+                //add to list
+                parent.addView(AttachmentViewJob.setUpPhotoAttachment(photoView, photo))
+            }
+            it.link?.let {link ->
+                //in attachments link found show link block
+                val linkView = layoutInflater.inflate(R.layout.simple_link, parent, false)
+                //add to list
+                parent.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link))
+            }
+        }
+    }
+
+    private fun setUpVideoAttachment(videoView: View, video: Video): View{
         Picasso.get().load(video.image_big).fit().centerCrop().into(videoView.video_image)
         videoView.video_title.text = video.title ?: "No video name"
         videoView.video_views.text = (video.views?.toString() ?: "No videos").plus(" views")
@@ -25,7 +51,7 @@ object AttachmentViewJob {
         return videoView
     }
 
-    fun setUpLinkAttachment(linkView: View, link: Link): View{
+    private fun setUpLinkAttachment(linkView: View, link: Link): View{
         linkView.link_image.visibility = View.GONE
         link.photo?.photo_sizes?.let { photo_sizes ->
             var src: String? = ""
@@ -53,7 +79,7 @@ object AttachmentViewJob {
         return linkView
     }
 
-    fun setUpPhotoAttachment(photoView: View, photo: Photo): View{
+    private fun setUpPhotoAttachment(photoView: View, photo: Photo): View{
         photoView.photo_image.visibility = View.GONE
         photo?.photo_sizes?.let { photo_sizes ->
             var src: String? = ""

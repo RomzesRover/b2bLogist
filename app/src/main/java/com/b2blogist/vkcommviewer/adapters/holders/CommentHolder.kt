@@ -3,16 +3,10 @@ package com.b2blogist.vkcommviewer.adapters.holders
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.method.LinkMovementMethod
-import android.text.style.URLSpan
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.b2blogist.vkcommviewer.R
 import com.b2blogist.vkcommviewer.adapters.holders.utils.AttachmentViewJob
 import com.b2blogist.vkcommviewer.adapters.holders.utils.Utils
 import com.squareup.picasso.Picasso
@@ -20,8 +14,6 @@ import kotlinx.android.synthetic.main.comment_row.view.*
 import vk.api.Comment
 import vk.api.Group
 import vk.api.User
-import java.text.SimpleDateFormat
-import java.util.*
 
 class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener{
     private var comment: Comment? = null
@@ -70,25 +62,6 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
         }
 
         //attachments job
-        view.attachments.removeAllViews()
-
-        comment.attachments?.forEach {
-            it.video?.let { video ->
-                val videoView = layoutInflater.inflate(R.layout.simple_video, view.attachments as ViewGroup, false)
-                //add to list
-                view.attachments.addView(AttachmentViewJob.setUpVideoAttachment(videoView, video))
-            }
-            it.photo?.let {photo ->
-                val photoView = layoutInflater.inflate(R.layout.simple_photo, view.attachments as ViewGroup, false)
-                //add to list
-                view.attachments.addView(AttachmentViewJob.setUpPhotoAttachment(photoView, photo))
-            }
-            it.link?.let {link ->
-                //in attachments link found show link block
-                val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
-                //add to list
-                view.attachments.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link))
-            }
-        }
+        AttachmentViewJob.doAttachmentsJob(comment.attachments, view.attachments, layoutInflater)
     }
 }
