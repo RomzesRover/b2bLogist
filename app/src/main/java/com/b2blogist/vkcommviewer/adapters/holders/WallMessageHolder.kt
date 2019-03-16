@@ -35,7 +35,7 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
         this.group = group
         this.wallMessage = wallMessage
 
-        //set group info
+        //set group name
         group.name?.takeIf { it.isNotBlank() }?.let {
             view.group_name_list.apply {
                 text = it

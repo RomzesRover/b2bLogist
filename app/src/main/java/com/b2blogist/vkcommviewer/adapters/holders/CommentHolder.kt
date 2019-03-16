@@ -40,10 +40,6 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
         this.group = group
         this.user = user
 
-        view.comment_text.setOnClickListener(this)
-        view.comment_text.movementMethod = LinkMovementMethod.getInstance()
-        view.comment_text.text = Utils.linkifyHtml(comment.text ?: "No comments", Linkify.ALL)
-
         //set comment date
         comment.date?.let {
             view.comment_date.apply {
@@ -52,13 +48,49 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
             }
         }
 
-        user?.let {
-            view.author_name.text = user.first_name.plus(" ").plus((user.last_name))
-            Picasso.get().load(user.photo_200 ?: user.photo_100 ?: user.photo_50).fit().centerInside().into(view.group_user_avatar_list)
+        //set comment text
+        comment.text?.takeIf { it.isNotBlank() }?.let {
+            view.comment_text.setOnClickListener(this)
+            view.comment_text.apply {
+                visibility = View.VISIBLE
+                movementMethod = LinkMovementMethod.getInstance()
+                text = Utils.linkifyHtml(it, Linkify.ALL)
+            }
         }
-        group?.let {
-            view.author_name.text = group.name
-            Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_user_avatar_list)
+
+        user?.apply {
+            //set user name
+            first_name?.takeIf { it.isNotBlank() }?.let {
+                view.author_name.apply {
+                    text = it
+                }
+            }
+            last_name?.takeIf { it.isNotBlank() }?.let {
+                view.author_name.apply {
+                    text = if (text.toString().isBlank()) it else text.toString().plus(" $it")
+                }
+            }
+
+            //set avatar
+            (photo_200 ?: photo_100 ?: photo_50)?.takeIf { it.isNotBlank() }?.let {
+                view.group_user_avatar_list.also { group_user_avatar_list ->
+                    Picasso.get().load(it).fit().centerInside().into(group_user_avatar_list)
+                }
+            }
+        }
+        group?.apply {
+            //set group name
+            name?.takeIf { it.isNotBlank() }?.let {
+                view.author_name.apply {
+                    text = it
+                }
+            }
+            //set avatar
+            (photo_big ?: photo_medium ?: photo)?.takeIf { it.isNotBlank() }?.let {
+                view.group_user_avatar_list.also { group_user_avatar_list ->
+                    Picasso.get().load(it).fit().centerInside().into(group_user_avatar_list)
+                }
+            }
         }
 
         //attachments job
