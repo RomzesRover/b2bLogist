@@ -41,8 +41,8 @@ object AttachmentViewJob {
 
     private fun setUpVideoAttachment(videoView: View, video: Video): View{
         Picasso.get().load(video.image_big).fit().centerCrop().into(videoView.video_image)
-        videoView.video_title.text = video.title ?: "No video name"
-        videoView.video_views.text = (video.views?.toString() ?: "No videos").plus(" views")
+        videoView.video_title.text = video.title ?: ""
+        videoView.video_views.text = videoView.context.getString(R.string.views).format(video.views?.toString() ?: videoView.context.getString(R.string.no))
         //set video click
         videoView.video.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://m.vk.com/video${video.owner_id}_${video.vid}"))
@@ -69,8 +69,8 @@ object AttachmentViewJob {
             linkView.link_image.visibility = View.VISIBLE
             Picasso.get().load(src).fit().centerCrop().into(linkView.link_image)
         }
-        linkView.link_title.text = link.title ?: "No link title"
-        linkView.link_url.text = link.url ?: "No link url"
+        linkView.link_title.text = link.title ?: ""
+        linkView.link_url.text = link.url ?: ""
         //set link click
         linkView.link.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))

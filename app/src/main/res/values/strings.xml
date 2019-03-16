@@ -2,5 +2,7 @@
     <string name="app_name">Умная Логистика</string>
     <string name="post">Пост</string>
     <string name="error_on_load">Ошибка при загрузке</string>
-    <string name="followers">%d Подписчиков</string>
+    <string name="followers">%d подписчиков</string>
+    <string name="no">Нет</string>
+    <string name="views">%s просмотров</string>
 </resources>
