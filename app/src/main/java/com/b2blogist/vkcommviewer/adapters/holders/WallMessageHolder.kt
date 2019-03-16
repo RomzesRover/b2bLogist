@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import com.b2blogist.vkcommviewer.PostCommentsActivity
 import com.b2blogist.vkcommviewer.R
 import com.b2blogist.vkcommviewer.adapters.holders.utils.AttachmentViewJob
+import com.b2blogist.vkcommviewer.adapters.holders.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_row.view.*
 import vk.api.Group
@@ -58,7 +59,7 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
         wallMessage.date?.let {
             view.post_date.apply {
                 visibility = View.VISIBLE
-                text = convertLongToTime(it)
+                text = Utils.convertLongToTime(it)
             }
         }
         //set post text
@@ -67,7 +68,7 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
             view.post_text.apply {
                 visibility = View.VISIBLE
                 movementMethod = LinkMovementMethod.getInstance()
-                text = linkifyHtml(it, Linkify.ALL)
+                text = Utils.linkifyHtml(it, Linkify.ALL)
             }
         }
 
@@ -98,26 +99,5 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
                 view.attachments.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link))
             }
         }
-    }
-
-    private fun convertLongToTime(time: Long): String {
-        val date = Date(time * 1000L)
-        val format = SimpleDateFormat("dd MMM yyyy 'at' HH:mm")
-        return format.format(date)
-    }
-
-    private fun linkifyHtml(html: String, linkifyMask: Int): Spannable {
-        val text = Html.fromHtml(html)
-        val currentSpans = text.getSpans(0, text.length, URLSpan::class.java)
-
-        val buffer = SpannableString(text)
-        Linkify.addLinks(buffer, linkifyMask)
-
-        for (span in currentSpans) {
-            val end = text.getSpanEnd(span)
-            val start = text.getSpanStart(span)
-            buffer.setSpan(span, start, end, 0)
-        }
-        return buffer
     }
 }
