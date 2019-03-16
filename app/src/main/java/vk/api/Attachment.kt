@@ -44,7 +44,7 @@ class Attachment() : Parcelable {
         }
 
         @Throws(JSONException::class)
-        fun parseAttachments(attachments: JSONArray?, from_id: Long, geo_json: JSONObject?): ArrayList<Attachment> {
+        fun parseAttachments(attachments: JSONArray?): ArrayList<Attachment> {
             val attachments_arr = ArrayList<Attachment>()
             if (attachments != null) {
                 val size = attachments.length()

@@ -14,6 +14,7 @@ class Comment() : Parcelable {
     var text: String? = null
     var reply_to_user: Long? = null
     var reply_to_comment: Long? = null
+    var attachments: ArrayList<Attachment>? = null
 
     constructor(parcel: Parcel) : this() {
         cid = parcel.readValue(Long::class.java.classLoader) as? Long
@@ -22,6 +23,9 @@ class Comment() : Parcelable {
         text = parcel.readString()
         reply_to_user = parcel.readValue(Long::class.java.classLoader) as? Long
         reply_to_comment = parcel.readValue(Long::class.java.classLoader) as? Long
+        attachments = arrayListOf<Attachment>().apply {
+            parcel.readList(this, Attachment::class.java.classLoader)
+        }
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -31,6 +35,7 @@ class Comment() : Parcelable {
         parcel.writeString(text)
         parcel.writeValue(reply_to_user)
         parcel.writeValue(reply_to_comment)
+        parcel.writeList(attachments)
     }
 
     override fun describeContents(): Int {
@@ -55,6 +60,7 @@ class Comment() : Parcelable {
             c.text = Utils.unescape(o.getString("text"))
             c.reply_to_user = o.optLong("reply_to_user")
             c.reply_to_comment = o.optLong("reply_to_comment")
+            c.attachments = Attachment.parseAttachments(o.optJSONArray("attachments"))
             return c
         }
 

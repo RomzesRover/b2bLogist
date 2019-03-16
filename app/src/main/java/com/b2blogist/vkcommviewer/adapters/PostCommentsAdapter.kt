@@ -97,7 +97,7 @@ class PostCommentsAdapter(private val context: Context, private var group: Group
         } else {
             if (holder is CommentHolder) {
                 val comment = comments.comments!![position-1]
-                holder.bindHeader(comment, comments.users?.find { it.uid != null && it.uid == comment.from_id }, comments.groups?.find { it.gid != null && -it.gid!! == comment.from_id })
+                holder.bindHeader(comment, comments.users?.find { it.uid != null && it.uid == comment.from_id }, comments.groups?.find { it.gid != null && -it.gid!! == comment.from_id }, layoutInflater)
             }
         }
     }

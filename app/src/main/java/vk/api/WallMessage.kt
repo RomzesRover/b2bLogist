@@ -135,10 +135,7 @@ class WallMessage() : Parcelable{
                     wm.copy_history!!.add(parse(history_item))
                 }
             }
-            val attachments = o.optJSONArray("attachments")
-            val geo_json = o.optJSONObject("geo")
-            //владельцем опроса является to_id. Даже если добавить опрос в группу от своего имени, то from_id буду я, но опрос всё-равно будет принадлежать группе.
-            wm.attachments = Attachment.parseAttachments(attachments, wm.to_id!!, geo_json)
+            wm.attachments = Attachment.parseAttachments(o.optJSONArray("attachments"))
             if (o.has("comments")) {
                 val jcomments = o.getJSONObject("comments")
                 wm.comment_count = jcomments.optInt("count").toLong()

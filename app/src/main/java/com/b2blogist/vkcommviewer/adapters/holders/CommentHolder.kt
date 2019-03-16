@@ -9,7 +9,11 @@ import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
 import android.text.util.Linkify
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import com.b2blogist.vkcommviewer.R
+import com.b2blogist.vkcommviewer.adapters.holders.utils.AttachmentViewJob
 import com.b2blogist.vkcommviewer.adapters.holders.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.comment_row.view.*
@@ -39,7 +43,7 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
         }
     }
 
-    fun bindHeader(comment: Comment, user: User?, group: Group?){
+    fun bindHeader(comment: Comment, user: User?, group: Group?, layoutInflater: LayoutInflater){
         this.comment = comment
         this.group = group
         this.user = user
@@ -63,6 +67,28 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
         group?.let {
             view.author_name.text = group.name
             Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_user_avatar_list)
+        }
+
+        //attachments job
+        view.attachments.removeAllViews()
+
+        comment.attachments?.forEach {
+            it.video?.let { video ->
+                val videoView = layoutInflater.inflate(R.layout.simple_video, view.attachments as ViewGroup, false)
+                //add to list
+                view.attachments.addView(AttachmentViewJob.setUpVideoAttachment(videoView, video))
+            }
+            it.photo?.let {photo ->
+                val photoView = layoutInflater.inflate(R.layout.simple_photo, view.attachments as ViewGroup, false)
+                //add to list
+                view.attachments.addView(AttachmentViewJob.setUpPhotoAttachment(photoView, photo))
+            }
+            it.link?.let {link ->
+                //in attachments link found show link block
+                val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
+                //add to list
+                view.attachments.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link))
+            }
         }
     }
 }
