@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import com.b2blogist.vkcommviewer.R
 import com.b2blogist.vkcommviewer.adapters.holders.HeaderHolder
 import com.b2blogist.vkcommviewer.adapters.holders.WallMessageHolder
+import com.b2blogist.vkcommviewer.targets.Targets
 import vk.api.Group
 import vk.api.WallMessage
 import java.util.*
 
 
-class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>, private val quantityOfWallPostToEachLoad: Int, private val targetWidth: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class GroupPageAdapter(private val context: Context, private var group: Group, private var wallMessages: ArrayList<WallMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
     private val visibleThreshold = 5
     private var lastVisibleItem: Int? = null
@@ -53,14 +54,14 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
         this.wallMessages.addAll(wallMessages)
         notifyDataSetChanged()
         isLoading = false
-        isEndOfListReached = wallMessages.size < quantityOfWallPostToEachLoad
+        isEndOfListReached = wallMessages.size < Targets.quantityOfWallPostToEachLoad
     }
 
     fun setNewWallMessages(wallMessages: ArrayList<WallMessage>){
         this.wallMessages = wallMessages
         notifyDataSetChanged()
         isLoading = false
-        isEndOfListReached = wallMessages.size < quantityOfWallPostToEachLoad
+        isEndOfListReached = wallMessages.size < Targets.quantityOfWallPostToEachLoad
     }
 
     fun setNewGroupInfo(group: Group){
@@ -94,7 +95,7 @@ class GroupPageAdapter(private val context: Context, private var group: Group, p
             holder.bindHeader(group)
         } else {
             if (holder is WallMessageHolder) {
-                holder.bindWallMessage(group, wallMessages[position-1], layoutInflater, targetWidth)
+                holder.bindWallMessage(group, wallMessages[position-1], layoutInflater)
             }
         }
     }

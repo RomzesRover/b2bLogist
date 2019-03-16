@@ -38,7 +38,7 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
         }
     }
 
-    fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater, targetWidth: Int){
+    fun bindWallMessage(group: Group, wallMessage: WallMessage, layoutInflater: LayoutInflater){
         this.group = group
         this.wallMessage = wallMessage
 
@@ -89,13 +89,13 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
             it.photo?.let {photo ->
                 val photoView = layoutInflater.inflate(R.layout.simple_photo, view.attachments as ViewGroup, false)
                 //add to list
-                view.attachments.addView(AttachmentViewJob.setUpPhotoAttachment(photoView, photo, targetWidth))
+                view.attachments.addView(AttachmentViewJob.setUpPhotoAttachment(photoView, photo))
             }
             it.link?.let {link ->
                 //in attachments link found show link block
                 val linkView = layoutInflater.inflate(R.layout.simple_link, view.attachments as ViewGroup, false)
                 //add to list
-                view.attachments.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link, targetWidth))
+                view.attachments.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link))
             }
         }
     }

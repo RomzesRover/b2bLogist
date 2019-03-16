@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import com.b2blogist.vkcommviewer.adapters.GroupPageAdapter
+import com.b2blogist.vkcommviewer.targets.Targets
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import kotlinx.android.synthetic.main.content_scrolling.*
@@ -23,9 +24,6 @@ import java.util.regex.Pattern
 class ScrollingActivity : AppCompatActivity() {
     private lateinit var viewAdapter: GroupPageAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private val quantityOfWallPostToEachLoad = 15
-    private val targetGroupID = 90405472L
-    private var targetWidth: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +37,7 @@ class ScrollingActivity : AppCompatActivity() {
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        targetWidth = size.x / 2
+        Targets.targetWidth = size.x / 2
 
         //start update on activity open
         swiperefresh.isRefreshing = true
@@ -52,13 +50,13 @@ class ScrollingActivity : AppCompatActivity() {
             if (::viewAdapter.isInitialized) viewAdapter.loadInProgress()
             //get group
             var group = Api.getGroups(
-                arrayListOf(targetGroupID),
+                arrayListOf(Targets.targetGroupID),
                 null,
                 "cover,contacts,status,members_count,description,site,city"
             )!![0]
             //get wall messages
             var wallMessages =
-                Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, 0, "all")
+                Api.getWallMessages(-Targets.targetGroupID, Targets.quantityOfWallPostToEachLoad, 0, "all")
 
             //fix user links n lines
             convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wallMessages)
@@ -74,7 +72,7 @@ class ScrollingActivity : AppCompatActivity() {
                         if (cover.width > width) {
                             width = cover.width
                             src = cover.src
-                            if (width >= targetWidth)
+                            if (width >= Targets.targetWidth)
                                 return@breaker
                         }
                     }
@@ -110,7 +108,7 @@ class ScrollingActivity : AppCompatActivity() {
             viewAdapter.setNewWallMessages(wallMessages)
         } else {
             //init recycle view
-            viewAdapter = GroupPageAdapter(this, group, wallMessages, quantityOfWallPostToEachLoad, targetWidth)
+            viewAdapter = GroupPageAdapter(this, group, wallMessages)
             viewManager = LinearLayoutManager(this)
             val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
             dividerItemDecoration.setDrawable(this.getDrawable(R.drawable.divider)!!)
@@ -124,7 +122,7 @@ class ScrollingActivity : AppCompatActivity() {
             viewAdapter.setOnLoadMoreListener(recycler_view, object : GroupPageAdapter.OnLoadMoreListener {
                 override fun onLoadMore() = Thread(Runnable {
                     try {
-                        var wms = Api.getWallMessages(-targetGroupID, quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
+                        var wms = Api.getWallMessages(-Targets.targetGroupID, Targets.quantityOfWallPostToEachLoad, viewAdapter.itemCount - 1, "all")
                         //fix user links n lines
                         convertTextLinksFromVkStyleToWebStyleSortPhotoLinks(wms)
                         runOnUiThread {

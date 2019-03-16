@@ -9,10 +9,11 @@ import com.b2blogist.vkcommviewer.R
 import com.b2blogist.vkcommviewer.adapters.holders.CommentHolder
 import com.b2blogist.vkcommviewer.adapters.holders.HeaderHolder
 import com.b2blogist.vkcommviewer.adapters.holders.WallMessageHolder
+import com.b2blogist.vkcommviewer.targets.Targets
 import vk.api.*
 import java.util.ArrayList
 
-class PostCommentsAdapter(private val context: Context, private var group: Group,  private var wallMessage: WallMessage, private var comments: Comments, private val quantityOfWallPostToEachLoad: Int, private val targetWidth: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class PostCommentsAdapter(private val context: Context, private var group: Group,  private var wallMessage: WallMessage, private var comments: Comments): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private val TYPE_HEADER = 0
     private val visibleThreshold = 5
     private var lastVisibleItem: Int? = null
@@ -54,14 +55,14 @@ class PostCommentsAdapter(private val context: Context, private var group: Group
         this.comments.groups?.addAll(comments.groups as ArrayList<Group>)
         notifyDataSetChanged()
         isLoading = false
-        isEndOfListReached = comments.comments!!.size < quantityOfWallPostToEachLoad
+        isEndOfListReached = comments.comments!!.size < Targets.quantityOfWallPostToEachLoad
     }
 
     fun setNewWallComments(comments: Comments){
         this.comments = comments
         notifyDataSetChanged()
         isLoading = false
-        isEndOfListReached = comments.comments!!.size < quantityOfWallPostToEachLoad
+        isEndOfListReached = comments.comments!!.size < Targets.quantityOfWallPostToEachLoad
     }
 
     fun setNewPostInfo(wallMessage: WallMessage){
@@ -92,7 +93,7 @@ class PostCommentsAdapter(private val context: Context, private var group: Group
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is WallMessageHolder) {
-            holder.bindWallMessage(group, wallMessage, layoutInflater, targetWidth)
+            holder.bindWallMessage(group, wallMessage, layoutInflater)
         } else {
             if (holder is CommentHolder) {
                 val comment = comments.comments!![position-1]

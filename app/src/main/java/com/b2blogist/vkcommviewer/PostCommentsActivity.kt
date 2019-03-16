@@ -1,6 +1,5 @@
 package com.b2blogist.vkcommviewer
 
-import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -8,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import com.b2blogist.vkcommviewer.adapters.PostCommentsAdapter
+import com.b2blogist.vkcommviewer.targets.Targets
 import kotlinx.android.synthetic.main.activity_post_comments.*
 import kotlinx.android.synthetic.main.content_post_comments.*
 import vk.api.*
@@ -16,8 +16,6 @@ import java.util.regex.Pattern
 class PostCommentsActivity : AppCompatActivity() {
     private lateinit var viewAdapter: PostCommentsAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private val quantityOfCommentsToEachLoad = 15
-    private var targetWidth: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,12 +24,6 @@ class PostCommentsActivity : AppCompatActivity() {
         swiperefresh.setOnRefreshListener {
             updateOperation()
         }
-
-        //init images size targeted width
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        targetWidth = size.x / 2
 
         //start update on activity open
         swiperefresh.isRefreshing = true
@@ -46,7 +38,7 @@ class PostCommentsActivity : AppCompatActivity() {
             var wms = intent.getParcelableExtra<WallMessage>("wallMessage")
             var group = intent.getParcelableExtra<Group>("group")
             //get comments
-            var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, quantityOfCommentsToEachLoad, 0, true)
+            var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, Targets.quantityOfCommentsToEachLoad, 0, true)
 
             //fix user links
             convertTextLinksFromVkStyleToWebStyle(comments.comments!!)
@@ -74,7 +66,7 @@ class PostCommentsActivity : AppCompatActivity() {
             viewAdapter.setNewWallComments(comments)
         } else {
             //init recycle view
-            viewAdapter = PostCommentsAdapter(this, group, wms, comments, quantityOfCommentsToEachLoad, targetWidth)
+            viewAdapter = PostCommentsAdapter(this, group, wms, comments)
             viewManager = LinearLayoutManager(this)
             val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
             dividerItemDecoration.setDrawable(this.getDrawable(R.drawable.divider)!!)
@@ -88,7 +80,7 @@ class PostCommentsActivity : AppCompatActivity() {
             viewAdapter.setOnLoadMoreListener(recycler_view, object : PostCommentsAdapter.OnLoadMoreListener {
                 override fun onLoadMore() = Thread(Runnable {
                     try {
-                        var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, quantityOfCommentsToEachLoad, viewAdapter.itemCount-1, true)
+                        var comments = Api.getCommentsOldApi(wms.from_id!!, wms.id!!, Targets.quantityOfCommentsToEachLoad, viewAdapter.itemCount-1, true)
                         //fix user links n lines
                         convertTextLinksFromVkStyleToWebStyle(comments.comments!!)
                         runOnUiThread {

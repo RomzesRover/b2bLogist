@@ -3,6 +3,7 @@ package com.b2blogist.vkcommviewer.adapters.holders.utils
 import android.content.Intent
 import android.net.Uri
 import android.view.View
+import com.b2blogist.vkcommviewer.targets.Targets
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.simple_link.view.*
 import kotlinx.android.synthetic.main.simple_photo.view.*
@@ -24,7 +25,7 @@ object AttachmentViewJob {
         return videoView
     }
 
-    fun setUpLinkAttachment(linkView: View, link: Link, targetWidth: Int): View{
+    fun setUpLinkAttachment(linkView: View, link: Link): View{
         linkView.link_image.visibility = View.GONE
         link.photo?.photo_sizes?.let { photo_sizes ->
             var src: String? = ""
@@ -34,7 +35,7 @@ object AttachmentViewJob {
                     if (photo_size.width > width) {
                         width = photo_size.width
                         src = photo_size.src
-                        if (width >= targetWidth)
+                        if (width >= Targets.targetWidth)
                             return@breaker
                     }
                 }
@@ -52,7 +53,7 @@ object AttachmentViewJob {
         return linkView
     }
 
-    fun setUpPhotoAttachment(photoView: View, photo: Photo, targetWidth: Int): View{
+    fun setUpPhotoAttachment(photoView: View, photo: Photo): View{
         photoView.photo_image.visibility = View.GONE
         photo?.photo_sizes?.let { photo_sizes ->
             var src: String? = ""
@@ -62,7 +63,7 @@ object AttachmentViewJob {
                     if (photo_size.width > width) {
                         width = photo_size.width
                         src = photo_size.src
-                        if (width >= targetWidth)
+                        if (width >= Targets.targetWidth)
                             return@breaker
                     }
                 }
