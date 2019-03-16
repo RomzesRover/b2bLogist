@@ -45,17 +45,42 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
         this.group = group
         this.wallMessage = wallMessage
 
-        Picasso.get().load(group.photo_big ?: group.photo_medium ?: group.photo).fit().centerInside().into(view.group_avatar_list)
-        view.group_name_list.text = group.name ?: "No group name"
-        view.post_date.text = convertLongToTime(wallMessage.date)
-        view.post_text.setOnClickListener(this)
-        view.post_text.movementMethod = LinkMovementMethod.getInstance()
-        view.post_text.text = linkifyHtml(wallMessage.text ?: "No post text", Linkify.ALL)
+        //set group info
+        group.name?.takeIf { it.isNotBlank() }?.let {
+            view.group_name_list.apply {
+                text = it
+            }
+        }
+        //set avatar
+        (group.photo_big ?: group.photo_medium ?: group.photo)?.takeIf { it.isNotBlank() }?.let {
+            view.group_avatar_list.also { group_avatar_list ->
+                Picasso.get().load(it).fit().centerInside().into(group_avatar_list)
+            }
+        }
+        //set post date
+        wallMessage.date?.let {
+            view.post_date.apply {
+                visibility = View.VISIBLE
+                text = convertLongToTime(it)
+            }
+        }
+        //set post text
+        wallMessage.text?.takeIf { it.isNotBlank() }?.let {
+            view.post_text.setOnClickListener(this)
+            view.post_text.apply {
+                visibility = View.VISIBLE
+                movementMethod = LinkMovementMethod.getInstance()
+                text = linkifyHtml(it, Linkify.ALL)
+            }
+        }
+
+        //set numerated post data
         view.likes.text = wallMessage.like_count?.toString() ?: "0"
         view.comments.text = wallMessage.comment_count?.toString() ?: "0"
         view.shares.text = wallMessage.reposts_count?.toString() ?: "0"
         view.views.text = wallMessage.views_count?.toString() ?: "0"
 
+        //attachments job
         view.attachments.removeAllViews()
 
         wallMessage.attachments?.forEach {
@@ -132,13 +157,10 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
         }
     }
 
-    private fun convertLongToTime(time: Long?): String {
-        time?.let {
-            val date = Date(it * 1000L)
-            val format = SimpleDateFormat("dd MMM yyyy 'at' HH:mm")
-            return format.format(date)
-        }
-        return "No post date"
+    private fun convertLongToTime(time: Long): String {
+        val date = Date(time * 1000L)
+        val format = SimpleDateFormat("dd MMM yyyy 'at' HH:mm")
+        return format.format(date)
     }
 
     private fun linkifyHtml(html: String, linkifyMask: Int): Spannable {

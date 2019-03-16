@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -17,8 +16,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars[0]" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -37,8 +35,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                tools:text="Умная Логистика" />
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
             <TextView
 
@@ -47,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                tools:text="Программа для автоматизации грузоперевозок" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <TableLayout
@@ -60,8 +57,10 @@
             app:layout_constraintTop_toBottomOf="@+id/group_avatar">
 
             <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:id="@+id/followers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -74,14 +73,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="576 followers" />
+                    android:singleLine="true" />
             </TableRow>
 
             <TableRow
-                android:layout_width="wrap_content"
+                android:id="@+id/description"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -95,14 +95,15 @@
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:maxLines="3"
-                    android:text="Мы — IT-компания, которая задает новый стандарт работы транспортно-логистической отрасли. В нашей команде только лучшие специалисты в своем деле, которым интересно не только работать вместе, но и отдыхать." />
+                    android:maxLines="3" />
             </TableRow>
 
             <TableRow
+                android:id="@+id/location"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -116,14 +117,15 @@
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:text="576 followers" />
+                    android:singleLine="true" />
             </TableRow>
 
             <TableRow
+                android:id="@+id/web_address"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -138,11 +140,15 @@
                     android:autoLink="web"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:text="576 followers" />
+                    android:singleLine="true" />
             </TableRow>
 
-            <TableRow android:layout_marginTop="4dp">
+            <TableRow
+                android:id="@+id/telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -157,8 +163,7 @@
                     android:autoLink="phone"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:text="576 followers" />
+                    android:singleLine="true" />
             </TableRow>
         </TableLayout>
     </android.support.constraint.ConstraintLayout>
