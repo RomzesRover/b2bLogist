@@ -17,6 +17,7 @@
         android:layout_marginLeft="@dimen/link_borders_stroke"
         android:layout_marginTop="@dimen/link_borders_stroke"
         android:layout_marginRight="@dimen/link_borders_stroke"
+        android:scaleType="centerCrop"
         android:visibility="gone" />
 
     <TextView

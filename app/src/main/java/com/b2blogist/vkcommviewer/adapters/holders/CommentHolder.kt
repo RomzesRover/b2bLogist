@@ -73,7 +73,7 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
             //set avatar
             (photo_200 ?: photo_100 ?: photo_50)?.takeIf { it.isNotBlank() }?.let {
                 view.group_user_avatar_list.also { group_user_avatar_list ->
-                    Picasso.get().load(it).fit().centerInside().into(group_user_avatar_list)
+                    Picasso.get().load(it).into(group_user_avatar_list)
                 }
             }
         }
@@ -87,7 +87,7 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
             //set avatar
             (photo_big ?: photo_medium ?: photo)?.takeIf { it.isNotBlank() }?.let {
                 view.group_user_avatar_list.also { group_user_avatar_list ->
-                    Picasso.get().load(it).fit().centerInside().into(group_user_avatar_list)
+                    Picasso.get().load(it).into(group_user_avatar_list)
                 }
             }
         }

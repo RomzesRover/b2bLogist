@@ -24,7 +24,7 @@ class HeaderHolder(private val view: View) : RecyclerView.ViewHolder(view){
         //set avatar
         (group.photo_big ?: group.photo_medium ?: group.photo)?.takeIf { it.isNotBlank() }?.let {
             view.group_avatar.also { group_avatar ->
-                Picasso.get().load(it).fit().centerInside().into(group_avatar)
+                Picasso.get().load(it).into(group_avatar)
             }
         }
         //additional info

@@ -71,7 +71,7 @@ class PostCommentsActivity : AppCompatActivity() {
             val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
             dividerItemDecoration.setDrawable(this.getDrawable(R.drawable.divider)!!)
             recycler_view.apply {
-                setHasFixedSize(true)
+                setHasFixedSize(false)
                 layoutManager = viewManager
                 adapter = viewAdapter
                 addItemDecoration(dividerItemDecoration)

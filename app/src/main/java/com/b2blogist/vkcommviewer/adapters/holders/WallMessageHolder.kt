@@ -44,7 +44,7 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
         //set avatar
         (group.photo_big ?: group.photo_medium ?: group.photo)?.takeIf { it.isNotBlank() }?.let {
             view.group_avatar_list.also { group_avatar_list ->
-                Picasso.get().load(it).fit().centerInside().into(group_avatar_list)
+                Picasso.get().load(it).into(group_avatar_list)
             }
         }
         //set post date

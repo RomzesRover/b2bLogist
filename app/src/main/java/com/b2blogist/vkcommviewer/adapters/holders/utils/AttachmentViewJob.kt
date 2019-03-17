@@ -40,7 +40,7 @@ object AttachmentViewJob {
     }
 
     private fun setUpVideoAttachment(videoView: View, video: Video): View{
-        Picasso.get().load(video.image_big).fit().centerCrop().into(videoView.video_image)
+        Picasso.get().load(video.image_big).into(videoView.video_image)
         videoView.video_title.text = video.title ?: ""
         videoView.video_views.text = videoView.context.getString(R.string.views).format(video.views?.toString() ?: videoView.context.getString(R.string.no))
         //set video click
@@ -67,7 +67,7 @@ object AttachmentViewJob {
                 }
             }
             linkView.link_image.visibility = View.VISIBLE
-            Picasso.get().load(src).fit().centerCrop().into(linkView.link_image)
+            Picasso.get().load(src).into(linkView.link_image)
         }
         linkView.link_title.text = link.title ?: ""
         linkView.link_url.text = link.url ?: ""
@@ -95,7 +95,7 @@ object AttachmentViewJob {
                 }
             }
             photoView.photo_image.visibility = View.VISIBLE
-            Picasso.get().load(src).fit().centerCrop().into(photoView.photo_image)
+            Picasso.get().load(src).into(photoView.photo_image)
         }
         //set photo click
         photoView.photo.setOnClickListener {
