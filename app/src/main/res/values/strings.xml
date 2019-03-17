@@ -5,4 +5,5 @@
     <string name="followers">%d подписчиков</string>
     <string name="no">Нет</string>
     <string name="views">%s просмотров</string>
+    <string name="read_more"><u>Читать дальше…</u></string>
 </resources>

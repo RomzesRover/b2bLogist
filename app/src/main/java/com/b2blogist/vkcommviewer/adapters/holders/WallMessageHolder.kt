@@ -9,6 +9,7 @@ import android.view.View
 import com.b2blogist.vkcommviewer.PostCommentsActivity
 import com.b2blogist.vkcommviewer.adapters.holders.utils.AttachmentViewJob
 import com.b2blogist.vkcommviewer.adapters.holders.utils.Utils
+import com.b2blogist.vkcommviewer.customViews.LayoutedTextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.group_page_row.view.*
 import vk.api.Group
@@ -62,6 +63,15 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
                 movementMethod = LinkMovementMethod.getInstance()
                 text = Utils.linkifyHtml(it, Linkify.ALL)
             }
+            if (!isOnTop)
+                view.post_text.setOnLayoutListener(object : LayoutedTextView.OnLayoutListener{
+                    override fun onLayouted(textView: LayoutedTextView) {
+                        textView.maxLines = 12
+                        if (textView.lineCount > textView.maxLines){
+                            view.read_more.visibility = View.VISIBLE
+                        }
+                    }
+                })
         }
 
         //set numerated post data

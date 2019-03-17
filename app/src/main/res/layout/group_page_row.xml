@@ -50,7 +50,7 @@
                 android:singleLine="true" />
         </LinearLayout>
 
-        <TextView
+        <com.b2blogist.vkcommviewer.customViews.LayoutedTextView
             android:id="@+id/post_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,6 +60,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/group_avatar_list" />
+
+        <TextView
+            android:id="@+id/read_more"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/read_more"
+            android:autoLink="all"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_text" />
 
 
     </android.support.constraint.ConstraintLayout>
