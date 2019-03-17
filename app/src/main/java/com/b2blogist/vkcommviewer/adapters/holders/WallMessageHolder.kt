@@ -3,7 +3,6 @@ package com.b2blogist.vkcommviewer.adapters.holders
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.text.method.LinkMovementMethod
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import com.b2blogist.vkcommviewer.PostCommentsActivity
@@ -61,7 +60,7 @@ class WallMessageHolder(private val view: View, private val isOnTop: Boolean) : 
             view.post_text.apply {
                 visibility = View.VISIBLE
                 movementMethod = LinkMovementMethod.getInstance()
-                text = Utils.linkifyHtml(it, Linkify.ALL)
+                text = Utils.linkifyHtml(it)
             }
             if (!isOnTop)
                 view.post_text.setOnLayoutListener(object : LayoutedTextView.OnLayoutListener{

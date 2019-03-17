@@ -7,6 +7,7 @@ import android.text.style.URLSpan
 import android.text.util.Linkify
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 object Utils {
     fun convertLongToTime(time: Long): String {
@@ -15,12 +16,14 @@ object Utils {
         return format.format(date)
     }
 
-    fun linkifyHtml(html: String, linkifyMask: Int): Spannable {
+    fun linkifyHtml(html: String): Spannable {
         val text = Html.fromHtml(html)
         val currentSpans = text.getSpans(0, text.length, URLSpan::class.java)
 
         val buffer = SpannableString(text)
-        Linkify.addLinks(buffer, linkifyMask)
+        Linkify.addLinks(buffer, Linkify.PHONE_NUMBERS)
+        val pattern = Pattern.compile("[a-z]+:\\/\\/[^ \\n]*")
+        Linkify.addLinks(buffer, pattern, "")
 
         for (span in currentSpans) {
             val end = text.getSpanEnd(span)

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.text.method.LinkMovementMethod
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import com.b2blogist.vkcommviewer.adapters.holders.utils.AttachmentViewJob
@@ -54,7 +53,7 @@ class CommentHolder(private val view: View) : RecyclerView.ViewHolder(view), Vie
             view.comment_text.apply {
                 visibility = View.VISIBLE
                 movementMethod = LinkMovementMethod.getInstance()
-                text = Utils.linkifyHtml(it, Linkify.ALL)
+                text = Utils.linkifyHtml(it)
             }
         }
 
