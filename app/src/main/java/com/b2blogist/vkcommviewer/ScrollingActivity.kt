@@ -1,9 +1,6 @@
 package com.b2blogist.vkcommviewer
 
-import android.graphics.Bitmap
 import android.graphics.Point
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -77,15 +74,7 @@ class ScrollingActivity : AppCompatActivity() {
                         }
                     }
                 }
-                Picasso.get().load(src).resize(toolbar_layout.width, toolbar_layout.height)
-                    .centerCrop().into(object : com.squareup.picasso.Target {
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        toolbar_layout.background =
-                            BitmapDrawable(applicationContext.resources, bitmap)
-                    }
-                })
+                Picasso.get().load(src).fit().centerCrop().into(cover_image)
                 //update adapter for recycler view
                 initRecycleView(group, wallMessages)
                 //stop refresh animation

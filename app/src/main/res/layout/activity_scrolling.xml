@@ -20,6 +20,7 @@
                 android:fitsSystemWindows="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="?attr/colorPrimary"
                 app:toolbarId="@+id/toolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentScrim="?attr/colorPrimary"
@@ -27,6 +28,12 @@
                 app:expandedTitleTextAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
                 app:expandedTitleMarginStart="20dp"
                 app:expandedTitleMarginBottom="-20dp">
+
+            <ImageView
+                android:id="@+id/cover_image"
+                android:fitsSystemWindows="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
