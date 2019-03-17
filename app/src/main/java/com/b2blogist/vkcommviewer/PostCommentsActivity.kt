@@ -54,7 +54,7 @@ class PostCommentsActivity : AppCompatActivity() {
                 //stop refresh animation
                 swiperefresh.isRefreshing = false
                 Toast.makeText(applicationContext, R.string.error_on_load, Toast.LENGTH_LONG).show()
-                viewAdapter.loadIsFailed()
+                if (::viewAdapter.isInitialized) viewAdapter.loadIsFailed()
             }
             e.printStackTrace()
         }
@@ -89,7 +89,7 @@ class PostCommentsActivity : AppCompatActivity() {
                     } catch (e: java.lang.Exception){
                         runOnUiThread {
                             Toast.makeText(applicationContext, R.string.error_on_load, Toast.LENGTH_LONG).show()
-                            viewAdapter.loadIsFailed()
+                            if (::viewAdapter.isInitialized) viewAdapter.loadIsFailed()
                         }
                         e.printStackTrace()
                     }

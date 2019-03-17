@@ -59,7 +59,7 @@ class HeaderHolder(private val view: View) : RecyclerView.ViewHolder(view){
                 group_location_address.text = it
             }
         }
-        group.addresses?.get(0)?.address?.takeIf { it.isNotBlank() }?.let {
+        group.addresses?.takeIf { it.size > 0 }?.get(0)?.address?.takeIf { it.isNotBlank() }?.let {
             view.location.apply {
                 if (visibility == View.VISIBLE)
                     group_location_address.text = group_location_address.text.toString().plus(", $it")
