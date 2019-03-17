@@ -23,18 +23,18 @@ object AttachmentViewJob {
             it.video?.let { video ->
                 val videoView = layoutInflater.inflate(R.layout.simple_video, parent, false)
                 //add to list
-                parent.addView(AttachmentViewJob.setUpVideoAttachment(videoView, video))
+                parent.addView(setUpVideoAttachment(videoView, video))
             }
             it.photo?.let {photo ->
                 val photoView = layoutInflater.inflate(R.layout.simple_photo, parent, false)
                 //add to list
-                parent.addView(AttachmentViewJob.setUpPhotoAttachment(photoView, photo))
+                parent.addView(setUpPhotoAttachment(photoView, photo))
             }
             it.link?.let {link ->
                 //in attachments link found show link block
                 val linkView = layoutInflater.inflate(R.layout.simple_link, parent, false)
                 //add to list
-                parent.addView(AttachmentViewJob.setUpLinkAttachment(linkView, link))
+                parent.addView(setUpLinkAttachment(linkView, link))
             }
         }
     }
